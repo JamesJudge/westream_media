@@ -1,0 +1,41 @@
+{# home/home.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style type="text/`css">
+        .standard-westream{
+            color:white;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    <section class="contact-section">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2> {{ user.nickname }} - {{ nickname }} </h2>
+            </div>
+            {% if user.nickname == nickname %}
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <p class="standard-westream">This is your profile. (edit link coming soon)</p>
+
+                    </div>
+                </div>
+                {% if user.streamingKey %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="standard-westream">Your streaming key is: {{ user.streamingKey }}</p>
+
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+
+{% endblock %}

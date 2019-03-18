@@ -7,20 +7,50 @@
  */
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\Session;
 
+
+
+/**
+ * Class StreamController
+ * @package App\Controller
+ */
 class StreamController extends AbstractController
 {
     /**
-     * @Route("/stream/view")
+     * @Route("/stream/view/{nickname}")
+     * @param $nickname
+     * @return mixed
      */
-    public function view()
+    public function view($nickname)
     {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $streamingUser = $repository->findOneBy(['nickname'=>$nickname]);
 
-        return $this->render('stream/view.html.twig', [
-            'streamID'=>'422686729988513539127548'
-        ]);
+        if(!empty($streamingUser)){
+            $user = $this->get('session')->get('user');
+            if(!empty($user)){
+                $nickname = $user->getNickname();
+            }else{
+                $nickname = 'Guest'.rnd(5);
+            }
+
+            return $this->render('stream/view.html.twig', [
+                'streamID'=>$streamingUser->getStreamingKey(),
+                'streamer'=>$streamingUser->getNickname(),
+                'nickname'=>$nickname,
+
+            ]);
+        }else{
+            return $this->render('stream/notFound.html.twig', [
+                //nothing to pass
+            ]);
+        }
+
+
     }
 }

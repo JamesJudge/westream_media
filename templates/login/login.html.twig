@@ -1,0 +1,96 @@
+{# signup/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style type="text/css">
+        form div.row{
+            padding-bottom: 2em;
+        }
+
+        form div.row label{
+            color: white;
+            font-weight: bold;
+            padding-left: 10px;
+            width: 80%
+        }
+
+        /*
+        form div.row input{
+            width: 80%
+        }
+        */
+        /*
+        form div.row{
+            width: 100%;
+            display: list-item;
+            margin: 0 auto;
+        }
+        */
+
+        form > div > div > div > label.required{
+            /*
+            text-decoration: underline;
+            text-decoration-color: red;
+            */
+        }
+
+        form > div > div > div > input{
+            width:100%;
+            max-width: 400px;
+        }
+
+        .form-center{
+            text-align: center;
+        }
+    </style>
+
+
+
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-section">
+    <div class="container">
+        <br/>
+        {{ form_start(form) }}
+        <div class="section-title text-center">
+            <h2>Log In</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-center alert alert-danger">
+                    <div>
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-center">
+                    {{ form_label(form.email) }} <br/> {{ form_widget(form.email) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-center">
+                    {{ form_label(form.passwordHash) }} <br/> {{ form_widget(form.passwordHash) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-center">
+                    <button class="btn btn-primary">Log In</button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</section>
+
+{% endblock %}
