@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class StreamController extends AbstractController
 {
+
     /**
      * @Route("/stream/view/{nickname}")
      * @param $nickname
@@ -53,4 +54,34 @@ class StreamController extends AbstractController
 
 
     }
-}
+
+
+
+
+    /**
+     * @Route("/stream/setup/instructions")
+
+     * @return mixed
+     */
+    public function setupInstructions()
+    {
+
+
+
+
+
+        return $this->render('stream/setupInstructions.html.twig', [
+            // nothing being passewd
+        ]);
+
+
+
+    }
+
+
+
+
+
+
+
+    }
