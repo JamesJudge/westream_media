@@ -52,6 +52,16 @@ class User
      */
     private $streamingKey;
 
+    /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     */
+    private $profileImage;
+
+    /**
+     * @ORM\Column(type="string", length=25, nullable=true)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +146,30 @@ class User
     public function setStreamingKey(?string $streamingKey): self
     {
         $this->streamingKey = $streamingKey;
+
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): self
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -19,11 +19,147 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserController extends AbstractController
 {
+
+    private function getCurrentUser(){
+        $currentUser = $this->get('session')->get('user');
+        return $currentUser;
+    }
+
+
+
+
+
+
     /**
+     * @Route("/chat/{nickname}")
+     * @param $nickname
+     * @param $popup
+     * @return mixed
+     */
+    public function chat($nickname)
+    {
+        $popup=true;
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $streamingUser = $repository->findOneBy(['nickname'=>$nickname]);
+
+        if(!empty($streamingUser)){
+            $user = $this->get('session')->get('user');
+            if(!empty($user)){
+                $nickname = $user->getNickname();
+            }else{
+                $nickname = 'Guest'.rnd(5);
+            }
+
+
+
+
+
+            return $this->render('user/chat.html.twig', [
+                'streamID'=>$streamingUser->getStreamingKey(),
+                'streamer'=>$streamingUser->getNickname(),
+                'nickname'=>$nickname,
+                'section' => 'live',
+                'currentUser' => $this->getCurrentUser(),
+                'killHeader' => $popup?true:false,
+                'killFooter' => $popup?true:false,
+            ]);
+        }else{
+            return $this->render('stream/notFound.html.twig', [
+                'section' => 'live',
+                'currentUser' => $this->getCurrentUser(),
+            ]);
+        }
+
+
+    }
+
+
+
+
+
+    /**
+     * @Route("/profile/photo")
+     * @return mixed
+     */
+    public function profilePhoto(Request $request)
+    {
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $currentUser = $repository->findBy(['nickname' => $this->getCurrentUser()->getNickname()]);
+
+
+
+
+        $form = $this->createFormBuilder(null, ['csrf_protection' => false])
+            ->add('profileImage', TextType::class, ['label' => 'Profile Image', 'attr' => ['id' => 'uploadImage']])
+            ->getForm();
+
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+        }
+
+
+
+
+
+         return $this->render('user/profileImage.html.twig', [
+            'section'=>'users',
+            'currentUser'=>$this->getCurrentUser(),
+             'form'=>$form->createView(),
+        ]);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @Route("/category/{category}")
+     * @param $category
+     * @return mixed
+     */
+    public function category($category)
+    {
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $streamingUsers = $repository->findBy(['category' => $category]);
+        //$streamingServer = "";
+
+        return $this->render('user/category.html.twig', [
+            'streamingUsers'=>$streamingUsers,
+            'category'=>$category,
+            'section'=>$category,
+            'currentUser'=>$this->getCurrentUser(),
+        ]);
+
+
+    }
+
+
+
+
+
+
+        /**
      * @Route("/signup")
      */
     public function new(Request $request)
     {
+        $section = 'signup';
+
         $user = new User();
 
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
@@ -79,6 +215,8 @@ class UserController extends AbstractController
 
         return $this->render('signup/new.html.twig', [
             'form' => $form->createView(),
+            'section' => $section,
+            'currentUser'=>$this->getCurrentUser(),
         ]);
     }
 
@@ -89,7 +227,9 @@ class UserController extends AbstractController
     public function thanks()
     {
         return $this->render('signup/thanks.html.twig', [
-            'streamID' => '422686729988513539127548'
+            'streamID' => '422686729988513539127548',
+            'section'=>'signup',
+            'currentUser'=>$this->getCurrentUser(),
         ]);
     }
 
@@ -127,30 +267,48 @@ class UserController extends AbstractController
 
         return $this->render('login/login.html.twig', [
             'form' => $form->createView(),
+            'section'=>'login',
+            'currentUser'=>$this->getCurrentUser(),
         ]);
     }
 
 
     /**
+     * @Route("/logout")
+     */
+    public function logout()
+    {
+        $this->get('session')->set('user', null);
+        return $this->redirect('/');
+    }
+
+        /**
      * @Route("/profile/{nickname}")
+     * @param $nickname
+     * @return mixed
      */
     public function viewProfile($nickname)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$nickname]);
 
-        //$currentUser = $this->getSession()->get('user');
-        //$nickname = empty($currentUser)?null:$currentUser->getNickname();
+        $currentUser = $this->get('session')->get('user');
+        //
+        $currentNickname = empty($currentUser)?null:$currentUser->getNickname();
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'nickname' =>$nickname,
+            'currentUser' =>$currentUser,
+            'currentNickname' => $currentNickname,
+            'section'=>'users',
+            'currentUser'=>$this->getCurrentUser(),
         ]);
     }
 
 
     /**
-     * @Route("/profiles/")
+     * @Route("/list/profiles/")
      */
     public function listProfiles()
     {
@@ -159,6 +317,8 @@ class UserController extends AbstractController
 
         return $this->render('user/list.html.twig', [
             'users' => $users,
+            'section' => 'users',
+            'currentUser'=>$this->getCurrentUser(),
         ]);
     }
 

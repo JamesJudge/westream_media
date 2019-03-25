@@ -17,19 +17,58 @@
     <section class="contact-section">
         <div class="container">
             <div class="section-title text-center">
-                <h2> {{ user.nickname }} - {{ nickname }} </h2>
+                <br/>
+                <h2>User Profile -  {{ user.nickname }}</h2>
             </div>
-            {% if user.nickname == nickname %}
+            {% if nickname == currentNickname %}
+                <!--
                 <div class="row">
                     <div class="col-lg-12 ">
-                        <p class="standard-westream">This is your profile. (edit link coming soon)</p>
+                        <p class="standard-westream">This is your profile. <a href="/profile/edit">(Edit your profile)</a></p>
 
                     </div>
                 </div>
-                {% if user.streamingKey %}
+                -->
+            {% endif %}
+
+
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ user.nickname }}</h3>
+                    <p>{{ user.firstName }}, {{ user.lastName }}</p>
+                    <div class="col-md-4">
+                        <p>Insert user bio here...</p>
+                    </div>
+                    <div class="col-md-4">
+                        {% if user.streamingKey != '' %}
+                            <p><a href="/stream/view/{{ user.nickname }}">Watch stream</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="/assets/profile/{% if user.profileImage|default %}{{ user.profileImage }}{% else %}blank-profile.png{% endif %}"/>
+                    {% if nickname == currentNickname %}
+                    <p><a href="/profile/photo">Change Profile Photo</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if nickname == currentNickname %}
+                {% if user.streamingKey != '' %}
                     <div class="row">
                         <div class="col-lg-12">
-                            <p class="standard-westream">Your streaming key is: {{ user.streamingKey }}</p>
+                            <p class="standard-westream">Your streaming key is: <a href="/stream/view/{{ user.nickname }}">{{ user.streamingKey }}</a></p>
+                            <p>The streaming server URL is rtmp://live.jamesjudge.info/LiveApp</p>
+                            <p><a href="/chat/{{ currentNickname }}" target="_blank">Pop out chat window for your stream</a></p>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="standard-westream">You have a basic account. <a href="/stream/request/">Request a streaming key</a></p>
+
 
                         </div>
                     </div>

@@ -35,12 +35,15 @@
     <div class="loader"></div>
 </div>
 
+{% block header %}
 {{ include('includes/header.html.twig', {}) }}
-
+{% endblock %}
 
 {% block body %}This page is blank{% endblock %}
 
+{% block footer %}
 {{ include('includes/footer.html.twig', {}) }}
+{% endblock %}
 
 {% block javascripts %}
 <!--====== Javascripts & Jquery ======-->
@@ -51,8 +54,8 @@
 <script src="{{ asset('assets/js/circle-progress.min.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
-<script src="{{ asset('assets/js/wavesurfer.min.js') }}"></script>
-<script src="{{ asset('assets/js/audio.js') }}"></script>
+<!-- script src="{{ asset('assets/js/wavesurfer.min.js') }}"></script -->
+<!-- script src="{{ asset('assets/js/audio.js') }}"></script -->
 {% endblock %}
 
 

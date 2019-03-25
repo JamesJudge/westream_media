@@ -1,0 +1,51 @@
+{# stream/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <section class="contact-section">
+        <div class="container">
+
+            <div class="section-title text-center">
+                <br/>
+                <h2>Category - {{ category }}</h2>
+                <h3>Users currently streaming in {{ category }}</h3>
+            </div>
+
+            {% for user in streamingUsers %}
+                {% if user.streamingKey is not empty %}
+                    {% if user.category == category %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>{{ user.nickname }}</h3>
+                            <p>{{ user.firstName }}, {{ user.lastName }}</p>
+                            <div class="col-md-4">
+                                <p><a href="/profile/{{ user.nickname }}">View Profile</a></p>
+                            </div>
+                            <div class="col-md-4">
+                                {% if user.streamingKey != '' %}
+                                    <p><a href="/stream/view/{{ user.nickname }}">Watch stream</a></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="/assets/profile/{{ user.profileImage }}"/>
+                        </div>
+                    </div>
+                    <hr/>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+
+
+
+
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

@@ -13,6 +13,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
+
+    private function getCurrentUser(){
+        $currentUser = $this->get('session')->get('user');
+        return $currentUser;
+    }
+
+
+
+
     /**
      * @Route("/")
      */
@@ -21,7 +30,8 @@ class HomeController extends AbstractController
 
 
         return $this->render('home/home.html.twig', [
-            //nothing to pass to home page
+            'section' => 'home',
+            'currentUser' => $this->getCurrentUser(),
         ]);
     }
 }

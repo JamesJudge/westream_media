@@ -52,9 +52,10 @@ while (true) {
 			$user_name = $tst_msg['name']; //sender name
 			$user_message = $tst_msg['message']; //message text
 			$user_color = $tst_msg['color']; //color
-			
+			$room = $tst_msg['room']; //chat room
+
 			//prepare data to be sent to client
-			$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
+			$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color, 'room'=>$room)));
 			send_message($response_text); //send data
 			break 2; //exist this loop
 		}

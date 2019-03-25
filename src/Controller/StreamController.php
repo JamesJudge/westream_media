@@ -22,6 +22,38 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class StreamController extends AbstractController
 {
 
+
+    private function getCurrentUser(){
+        $currentUser = $this->get('session')->get('user');
+        return $currentUser;
+    }
+
+
+    /**
+     * @Route("/list/streams")
+     * @return mixed
+     */
+    public function list()
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $streamingUsers = $repository->findAll();
+        //$streamingServer = "";
+
+        return $this->render('stream/list.html.twig', [
+            'streamingUsers'=>$streamingUsers,
+            'section' => 'live',
+            'currentUser' => $this->getCurrentUser(),
+        ]);
+
+
+
+    }
+
+
+
+
+
+
     /**
      * @Route("/stream/view/{nickname}")
      * @param $nickname
@@ -40,15 +72,21 @@ class StreamController extends AbstractController
                 $nickname = 'Guest'.rnd(5);
             }
 
+
+
+
+
             return $this->render('stream/view.html.twig', [
                 'streamID'=>$streamingUser->getStreamingKey(),
                 'streamer'=>$streamingUser->getNickname(),
                 'nickname'=>$nickname,
-
+                'section' => 'live',
+                'currentUser' => $this->getCurrentUser(),
             ]);
         }else{
             return $this->render('stream/notFound.html.twig', [
-                //nothing to pass
+                'section' => 'live',
+                'currentUser' => $this->getCurrentUser(),
             ]);
         }
 
@@ -71,7 +109,7 @@ class StreamController extends AbstractController
 
 
         return $this->render('stream/setupInstructions.html.twig', [
-            // nothing being passewd
+            'currentUser' => $this->getCurrentUser(),
         ]);
 
 
