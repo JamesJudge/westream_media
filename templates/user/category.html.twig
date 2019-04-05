@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <h3>{{ user.nickname }}</h3>
-                            <p>{{ user.firstName }}, {{ user.lastName }}</p>
+                            <p id="fullname" style="{% if user.nickname == 'ClubEd' %}color:#33f70c;{% endif %}">{{ user.lastName }}, {{ user.firstName }}</p>
                             <div class="col-md-4">
                                 <p><a href="/profile/{{ user.nickname }}">View Profile</a></p>
                             </div>

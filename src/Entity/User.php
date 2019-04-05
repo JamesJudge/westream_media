@@ -62,6 +62,11 @@ class User
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    private $bio;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,6 +175,18 @@ class User
     public function setCategory(?string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
 
         return $this;
     }
