@@ -282,7 +282,7 @@ class UserController extends AbstractController
         return $this->redirect('/');
     }
 
-        /**
+    /**
      * @Route("/profile/{nickname}")
      * @param $nickname
      * @return mixed
@@ -300,11 +300,49 @@ class UserController extends AbstractController
             'user' => $user,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,
-            'currentNickname' => $currentNickname,
+            'currentNickname' => $currentNickname, //todo: deprecate this
             'section'=>'users',
             'currentUser'=>$this->getCurrentUser(),
         ]);
     }
+
+
+
+
+
+
+
+    /**
+     * @Route("/dashboard")
+     * @return mixed
+     */
+    public function viewDashboard()
+    {
+        return $this->render('admin/dashboard.html.twig', [
+            'section'=>'users',
+            'currentUser'=>$this->getCurrentUser(),
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**

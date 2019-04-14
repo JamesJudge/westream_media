@@ -38,7 +38,7 @@
                     <h3>{{ user.nickname }}</h3>
                     <p id="fullname" style="{% if user.nickname == 'ClubEd' %}color:#33f70c;{% endif %}">{{ user.lastName }}, {{ user.firstName }}</p>
                     <div class="col-md-4">
-                        <p>Insert user bio here...</p>
+                        <p>{%  if user.bio|default %}{{ user.bio|default }}{% else %}This user has no Bio. Sorry. {% endif %}</p>
                     </div>
                     <div class="col-md-4">
                         {% if user.streamingKey != '' %}
