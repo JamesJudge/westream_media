@@ -69,7 +69,7 @@ class StreamController extends AbstractController
             if(!empty($user)){
                 $nickname = $user->getNickname();
             }else{
-                $nickname = 'Guest'.rnd(5);
+                $nickname = 'Guest'.rand(1,1000);
             }
 
 
