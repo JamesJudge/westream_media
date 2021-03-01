@@ -1,5 +1,5 @@
 <header class="header-section" style="background-image: url('{{ asset('assets/img/bg.png') }}')">
-    <div class="header-warp">
+    <p class="header-warp">
         <!-- Site Logo -->
         <a href="/" class="site-logo">
             <img src="{{ asset('assets/img/logo.png') }}" alt="">
@@ -20,8 +20,7 @@
         </div>
 
         <!-- Main Menu -->
-        <br clear="all"/>
-        <div id="menu-div" style="display:block">
+        <p>
             <ul class="main-menu">
                 <li{% if section|default and section == 'home' %} class="active"{% endif %}><a href="/">Home</a></li>
                 <li{% if section|default and section == 'live' %} class="active"{% endif %}><a href="/list/streams">Live Now</a></li>
@@ -40,7 +39,7 @@
                 {% endif %}
 
             </ul>
-        </div>
+        </p>
 
     </div>
 </header>
