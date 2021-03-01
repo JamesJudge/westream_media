@@ -11,10 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Class AdminController
+ * @package App\Controller
+ */
 class AdminController extends AbstractController
 {
     /**
      * @Route("/admin")
+     * @return mixed
      */
     public function dashboard()
     {
