@@ -486,9 +486,11 @@ ol {
 	color: #ffe400;
 }
 
+/*
 .main-menu li.active a {
 	background: #080808;
 }
+*/
 
 .main-menu li.active a:after {
 	position: absolute;
