@@ -61,7 +61,8 @@
     </div>
     <div class="chat-wrapper">
         <div class="embed-responsive embed-responsive-16by9">
-            <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe>
+            <!-- <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe> -->
+            <video id="video-player" controls playsinline></video>
         </div>
 
         <div id="message-box"></div>
@@ -163,5 +164,50 @@
             message_input.val(''); //reset message input
         }
     </script>
+    <script src="https://player.live-video.net/1.2.0/amazon-ivs-player.min.js"></script>
+    <script language="JavaScript" type="text/javascript">
+        (function (IVSPlayerPackage) {
+            // First, check if the browser supports the IVS player.
+            if (!IVSPlayerPackage.isPlayerSupported) {
+                console.warn("The current browser does not support the IVS player.");
+                return;
+            }
 
+            const PlayerState = IVSPlayerPackage.PlayerState;
+            const PlayerEventType = IVSPlayerPackage.PlayerEventType;
+
+            // Initialize player
+            const player = IVSPlayerPackage.create();
+            console.log("IVS Player version:", player.getVersion());
+            player.attachHTMLVideoElement(document.getElementById("video-player"));
+
+            // Attach event listeners
+            player.addEventListener(PlayerState.PLAYING, function () {
+                console.log("Player State - PLAYING");
+            });
+            player.addEventListener(PlayerState.ENDED, function () {
+                console.log("Player State - ENDED");
+            });
+            player.addEventListener(PlayerState.READY, function () {
+                console.log("Player State - READY");
+            });
+            player.addEventListener(PlayerEventType.ERROR, function (err) {
+                console.warn("Player Event - ERROR:", err);
+            });
+            player.addEventListener(PlayerEventType.TEXT_METADATA_CUE, (cue) => {
+                const metadataText = cue.text;
+                const position = player.getPosition().toFixed(2);
+                console.log(
+                    `PlayerEvent - TEXT_METADATA_CUE: "${metadataText}". Observed ${position}s after playback started.`
+                );
+            });
+
+            // Setup stream and play
+            player.setAutoplay(true);
+            player.load(
+                "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
+            );
+            player.setVolume(0.5);
+        })(window.IVSPlayer);
+    </script>
 {% endblock %}
