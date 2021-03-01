@@ -16,7 +16,7 @@
             <li{% if section|default and section == 'DJ' %} class="active"{% endif %}><a href="/category/DJ">DJ’s</a></li>
             <li{% if section|default and section == 'Performer' %} class="active"{% endif %}><a href="/category/Performer">Shows</a></li>
             <li{% if section|default and section == 'users' %} class="active"{% endif %}><a href="/list/profiles">Users</a></li>
-            <li{% if section|default and section == 'chat' %} class="active"{% endif %}><a href="/list/chatrooms">Chat</a></li>
+            <!-- <li{% if section|default and section == 'chat' %} class="active"{% endif %}><a href="/list/chatrooms">Chat</a></li> -->
 
             {% if currentUser|default %}
                 <li{% if section|default and section == 'profile' %} class="active"{% endif %}><a href="/profile/{{ currentUser.nickname }}">My Profile</a></li>
