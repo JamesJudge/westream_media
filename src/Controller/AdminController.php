@@ -30,4 +30,22 @@ class AdminController extends AbstractController
     }
 
 
+    /**
+     * * @Route(path="/admin/user/list", methods={"GET"})
+     * @return mixed
+     */
+    public function userList()
+    {
+        return $this->render('admin/userList.html.twig', [
+            'title' => 'User List',
+            //'currentUser' => $this->getCurrentUser(),
+        ]);
+    }
+
+
+
+
+
+
+
 }

@@ -1,0 +1,570 @@
+{# admin/companyList.html.twig #}
+{% extends 'admin-base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block breadcrum %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Companies</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="modal fade" id="modal-company-form">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="form-title">Add / Edit Company</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <form id="companyForm" name="companyForm" method="post" action="/api/company/add">
+                        <input type="hidden" name="formId" value=""/>
+                        <input type="hidden" name="formPri" value=""/>
+                        <table border="0">
+                            <tr>
+                                <th align="right">Company Name</th>
+                                <td><input type="text" name="formCompanyName" id="formCompanyName"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Ticker</th>
+                                <td><input type="text" name="formTicker" id="formTicker"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Nick Name</th>
+                                <td><input type="text" name="formNickName" id="formNickName"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Address 1</th>
+                                <td><input type="text" name="formAddress1" id="formAddress1"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Address 2</th>
+                                <td><input type="text" name="formAddress2" id="formAddress2"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">City</th>
+                                <td><input type="text" name="formCity" id="formCity"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">State</th>
+                                <td><input type="text" name="formState" id="formState"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Postal Code</th>
+                                <td><input type="text" name="formPostalCode" id="formPostalCode"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Home Country</th>
+                                <td><input type="text" name="formHomeCountry" id="formHomeCountry"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Country of Origin</th>
+                                <td><input type="text" name="formCountryOfOrigin" id="formCountryOfOrigin"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Active</th>
+                                <td><label for="formActiveYes"><input type="radio" name="formActive" id="formActiveYes" checked/>Yes</label> &nbsp; <label for="formActiveNo"><input type="radio" name="formActive" id="formActiveNo"/>No</label></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Deleted</th>
+                                <td><label for="formDeletedYes"><input type="radio" name="formDeleted" id="formDeletedYes"/>Yes</label> &nbsp; <label for="formDeletedNo"><input type="radio" name="formDeleted" id="formDeletedNo" checked/>No</label></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Archived</th>
+                                <td><label for="formArchivedYes"><input type="radio" name="formArchived" id="formArchivedYes"/>Yes</label> &nbsp; <label for="formArchivedNo"><input type="radio" name="formArchived" id="formArchivedNo" checked/>No</label></td>
+                            </tr>
+                            <tr>
+                                <td align="right"><button name="btnCancel" id="btnCancel" onclick="cancel()">Cancel</button></td>
+                                <td><button name="btnSave" id="btnSave" onclick="save()">Save</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-company-view">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="view-title">Add / Edit Company</h4>
+                    <button type="button" class="edit" data-toggle="modal" data-target="#modal-company-form" aria-label="Edit" id="btnEditCompany">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+
+                        <table border="0">
+                            <tr>
+                                <th align="right">Record ID</th>
+                                <td id="view-id"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Primary Key</th>
+                                <td id="view-pri"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Company Name</th>
+                                <td id="view-companyName"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Ticker</th>
+                                <td id="view-ticker"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Nick Name</th>
+                                <td id="view-nickName"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Address 1</th>
+                                <td id="view-address1"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Address 2</th>
+                                <td id="view-address2"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">City</th>
+                                <td id="view-city"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">State</th>
+                                <td id="view-state"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Postal Code</th>
+                                <td id="view-postalCode"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Home Country</th>
+                                <td id="view-homeCountry"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Country of Origin</th>
+                                <td id="view-countryOfOrigin"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Active</th>
+                                <td id="view-active"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Deleted</th>
+                                <td id="view-deleted"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Archived</th>
+                                <td id="view-archived"></td>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <h3>User Management</h3>
+                        <button type="button" class="edit" data-toggle="modal" data-target="#modal-contact-form" aria-label="Edit" id="btnEditContact">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">Add User</span>
+                        </button><br/>
+                        <span id="no-contacts-found" style="view:none;"><br/>No Users Found</span>
+                        <table id="contactsTable" class="table table-bordered table-striped hover">
+                            <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nickname</th>
+                                <th>Streaming Key</th>
+                                <th>Photo</th>
+                                <th>Category</th>
+                                <th>Bio</th>
+                            </tr>
+                            </thead>
+                            <tbody id="view-company-contacts">
+                                <tr>
+                                    <td colspan = "8">No contacts found</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nickname</th>
+                                <th>Streaming Key</th>
+                                <th>Photo</th>
+                                <th>Category</th>
+                                <th>Bio</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Users List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div id="customButtons" style="margin-bottom:10px">
+                            <button name="btnAdd" id="btnAdd" onclick="addRow()">Add New</button>
+                        </div>
+                        <table id="companiesTable" class="table table-bordered table-striped hover">
+                            <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nickname</th>
+                                <th>Streaming Key</th>
+                                <th>Pic</th>
+                                <th>Categories</th>
+                                <th>Bio</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody-companies" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
+                            <tr>
+                                <td colspan="15">Loading...</td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nickname</th>
+                                <th>Streaming Key</th>
+                                <th>Pic</th>
+                                <th>Categories</th>
+                                <th>Bio</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- DataTables -->
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+
+
+    <script>
+        $(function () {
+
+
+
+            function getUsers(){
+                $.get("/api/users", function(data, status){
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    if(status == 'success'){
+                        gotUsers(data);
+                    }else{
+                        alert("Ajax error occurred");
+                        console.log(data);
+                        console.log(data.length);
+                    }
+                });
+            }
+
+            function gotUsers(data) {
+                console.log("Got " + data.length + " users");
+                var table = $("#tbody-companies");
+                table.empty();
+                console.log("Cleared tbody");
+
+                if(data.length < 1){
+                    console.log("No data returned");
+                    table.innerHTML = '<tr><td colspan="15">There are 0 users in the database</td></tr>';
+                    return false;
+                }
+
+                //Add the data rows.
+                var cell = "";
+                var row = "";
+                for (var i = 0; i < data.length; i++) {
+                    row = $("<tr id='"+data[i]["id"]+"'/>");
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["email"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["first_name"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["last_name"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["nickname"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["streaming_key"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["profile_image"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["category"]+"</a>");
+                    row.append(cell);
+
+                    cell = $("<td />");
+                    cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["bio"]+"</a>");
+                    row.append(cell);
+
+                    table.append(row);
+                }
+                $("#companiesTable").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                });
+            };
+
+
+            getUsers();
+
+
+
+
+        });
+
+        function addRow(){
+            document.forms['userForm'].reset();
+            document.getElementById('form-title').innerHTML = 'Add User';
+            $('#modal-user-form').modal();
+        }
+
+        function viewRow(rowIdentifier){
+            $.get("/api/user/"+rowIdentifier, function(data, status){
+                //alert("Data: " + data + "\nStatus: " + status);
+                if(status == 'success'){
+                    console.log("Got user data");
+                    showUser(data);
+                }else{
+                    alert("Ajax error occurred");
+                    console.log(data);
+                    console.log(data.length);
+                }
+            });
+        }
+
+        function showUser(data){
+            clearCompanyView();
+            $("#view-id").html(data['id']);
+            $("#view-pri").html(data['pri']);
+            $("#view-companyName").html(data['companyname']);
+            $("#view-ticker").html(data['ticker']);
+            $("#view-nickName").html(data['nickname']);
+            $("#view-address1").html(data['address1']);
+            $("#view-address2").html(data['Address2']);
+            $("#view-city").html(data['city']);
+            $("#view-state").html(data['state']);
+            $("#view-postalCode").html(data['postalcode']);
+            $("#view-homeCountry").html(data['homecountry']);
+            $("#view-countryOfOrigin").html(data['maincountryoforigin']);
+            data['active']?$("#view-active").html("Yes"):$("#view-active").html("No");
+            data['deleted']?$("#view-deleted").html("Yes"):$("#view-deleted").html("No");
+            data['archived']?$("#view-archived").html("Yes"):$("#view-archived").html("No");
+            $("#btnEditCompany").click(function(){editRow(data['id']);$("#modal-company-view").modal('hide');clearCompanyView()});
+            document.getElementById('view-title').innerHTML = 'Edit Company - ' + data['companyname'];
+
+            $('#modal-company-view').modal();
+            $("#no-contacts-found").show();
+            $("#contactsTable").hide();
+            /*
+            $("#contactsTable").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+            */
+            // get contacts via ajax
+            getContacts(data["id"]);
+        }
+
+        function getContacts(id){
+            $.get("/api/company/"+rowIdentifier+"/contacts", function(data, status){
+                //alert("Data: " + data + "\nStatus: " + status);
+                if(status == 'success'){
+                    console.log("Got contacts data");
+                    gotContacts(data);
+                }else{
+                    alert("Ajax error occurred");
+                    console.log(data);
+                    console.log(data.length);
+                }
+            });
+        }
+
+        function gotContacts(data){
+            console.log("Got " + data.length + " contacts");
+            var table = $("#view-company-contacts");
+            table.empty();
+            console.log("Cleared contacts");
+
+            if(data.length < 1){
+                console.log("No data returned");
+                $("#contactsTable").hide();
+                $("#no-contacts-found").show();
+                return false;
+            }
+
+            //Add the data rows.
+            var cell = "";
+            var row = "";
+            for (var i = 0; i < data.length; i++) {
+                row = $("<tr id='"+data[i]["id"]+"'/>");
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["companyname"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["title"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["name"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["address"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["website"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["emails"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["phones"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["socialmedia"]+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["active"]?'Y':'N')+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["deleted"]?'Y':'N')+"</a>");
+                row.append(cell);
+
+                cell = $("<td />");
+                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["archived"]?'Y':'N')+"</a>");
+                row.append(cell);
+
+                table.append(row);
+            }
+            $("#contactsTable").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+        }
+
+
+
+        function clearCompanyView(){
+            $("#view-id").html('');
+            $("#formPri").html('');
+            $("#formCompanyName").html('');
+            $("#formTicker").html('');
+            $("#formNickName").html('');
+            $("#formAddress1").html('');
+            $("#formAddress2").html('');
+            $("#formCity").html('');
+            $("#formState").html('');
+            $("#formPostalCode").html('');
+            $("#formHomeCountry").html('');
+            $("#formCountryOfOrigin").html('');
+            $("#view-active").html('');
+            $("#view-deleted").html('');
+            $("#view-archived").html('');
+
+            document.getElementById('form-title').innerHTML = 'Edit Company - No company data loaded';
+        }
+
+
+        function editRow(rowIdentifier){
+            $.get("/api/company/"+rowIdentifier, function(data, status){
+                //alert("Data: " + data + "\nStatus: " + status);
+                if(status == 'success'){
+                    console.log("Got company data");
+                    gotCompany(data);
+                }else{
+                    alert("Ajax error occurred");
+                    console.log(data);
+                    console.log(data.length);
+                }
+            });
+        }
+
+        function gotCompany(data){
+            console.log(data['companyname']);
+            document.forms['companyForm'].reset();
+            $("#formId").val(data['id']);
+            $("#formPri").val(data['pri']);
+            $("#formCompanyName").val(data['companyname']);
+            $("#formTicker").val(data['ticker']);
+            $("#formNickName").val(data['nickname']);
+            $("#formAddress1").val(data['address1']);
+            $("#formAddress2").val(data['Address2']);
+            $("#formCity").val(data['city']);
+            $("#formState").val(data['state']);
+            $("#formPostalCode").val(data['postalcode']);
+            $("#formHomeCountry").val(data['homecountry']);
+            $("#formCountryOfOrigin").val(data['maincountryoforigin']);
+            data['active']?$("#formActiveYes").checked = true:$("#formActiveNo").checked = true;
+            data['deleted']?$("#formDeletedYes").checked = true:$("#formDeletedNo").checked = true;
+            data['archived']?$("#formArchivedYes").checked = true:$("#formArchivedNo").checked = true;
+
+            document.getElementById('form-title').innerHTML = 'Edit Company';
+            $('#modal-company-form').modal();
+        }
+
+    </script>
+{% endblock %}
