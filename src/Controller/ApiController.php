@@ -34,22 +34,5 @@ class ApiController extends AbstractController
         return $response;
     }
 
-    /**
-     * * @Route(path="/api/user/{id}", methods={"GET"})
-     * @param $id
-     * @return mixed
-     */
-    public function getUser($id)
-    {
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $user = $repository->findOneBy(array('id'=>$id));
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-
-        $serializer = SerializerBuilder::create()->build();
-        $response->setContent($serializer->serialize($user, 'json'));
-
-        return $response;
-    }
+    
 }
