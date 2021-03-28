@@ -14,7 +14,7 @@
             </div>
 
             {% for user in streamingUsers %}
-                {% if user.getStreamingKey() is not empty %}
+                {% if user.streamingKey is not empty %}
                         <div class="row">
                             <div class="col-md-8">
                                 <h3>{{ user.nickname }}</h3>
