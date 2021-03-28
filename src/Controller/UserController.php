@@ -312,35 +312,6 @@ class UserController extends AbstractController
 
 
 
-    /**
-     * @Route("/dashboard")
-     * @return mixed
-     */
-    public function viewDashboard()
-    {
-        return $this->render('admin/dashboard.html.twig', [
-            'section'=>'users',
-            'currentUser'=>$this->getCurrentUser(),
-        ]);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
