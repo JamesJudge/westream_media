@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
-use JMS\SerializerBundle\JMSSerializerBundle;
+
 
 /**
  * Class ApiController
@@ -24,7 +24,7 @@ class ApiController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $companies = $repository->findAll();
-        $serializer = $container->get('jms_serializer');
+        $serializer = JMS\Serializer\SerializerBuilder::create()->build();
 
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
