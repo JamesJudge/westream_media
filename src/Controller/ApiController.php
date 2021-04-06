@@ -25,7 +25,7 @@ class ApiController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $companies = $repository->findAll();
-        $serializer = JMS\SerializerBuilder::create()->build();
+        $serializer = new JMS\Serializeer\SerializerBuilder();
 
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
