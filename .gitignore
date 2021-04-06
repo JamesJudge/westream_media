@@ -16,3 +16,11 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+.idea/misc.xml
+.idea/modules.xml
+.idea/php.xml
+.idea/vcs.xml
+.idea/westream_media.iml
+.idea/workspace.xml
+.gitignore
+.idea/
