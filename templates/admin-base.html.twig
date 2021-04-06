@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>The Video Voyager Admin - {% block title %}Dashboard{% endblock %}</title>
+    <title>The Video Voyager Admin - {{ section }}</title>
 
     {% block stylesheets %}
     <!-- Font Awesome Icons -->
@@ -35,7 +35,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">CDS Admin {{ title }}</h1>
+                        <h1 class="m-0 text-dark">CDS Admin {{ section }}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         {% block breadcrum %}

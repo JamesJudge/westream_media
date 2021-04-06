@@ -24,7 +24,7 @@ class AdminController extends AbstractController
     public function dashboard()
     {
         return $this->render('admin/dashboard.html.twig', [
-            'section' => 'dashboard',
+            'section' => 'Dashboard',
             //'currentUser' => $this->getCurrentUser(),
         ]);
     }
@@ -37,7 +37,7 @@ class AdminController extends AbstractController
     public function userList()
     {
         return $this->render('admin/userList.html.twig', [
-            'title' => 'User List',
+            'section' => 'User List',
             //'currentUser' => $this->getCurrentUser(),
         ]);
     }
