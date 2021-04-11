@@ -44,17 +44,16 @@ class ApiController extends AbstractController
 
     /**
      * * @Route(path="/api/user/{id}", methods={"GET"})
-
      * @return mixed
      */
     public function userView($id)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $companies = $repository->findBy(['id'=>$id]);
+        $user = $repository->findBy(['id'=>$id]);
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($companies, 'json');
+        $jsonContent = $serializer->serialize($user, 'json');
 
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
