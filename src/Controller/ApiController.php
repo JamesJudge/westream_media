@@ -50,7 +50,7 @@ class ApiController extends AbstractController
     public function userView($id)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $companies = $repository->findBy('id',$id);
+        $companies = $repository->findBy(['id'=>$id]);
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
