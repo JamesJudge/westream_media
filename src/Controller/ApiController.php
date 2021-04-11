@@ -44,6 +44,7 @@ class ApiController extends AbstractController
 
     /**
      * * @Route(path="/api/user/{id}", methods={"GET"})
+
      * @return mixed
      */
     public function userView($id)
