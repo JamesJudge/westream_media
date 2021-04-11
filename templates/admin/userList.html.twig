@@ -383,6 +383,7 @@
                 //alert("Data: " + data + "\nStatus: " + status);
                 if(status == 'success'){
                     console.log("Got user data");
+                    data = JSON.parse(data);
                     showUser(data);
                 }else{
                     alert("Ajax error occurred");
