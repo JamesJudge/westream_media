@@ -157,7 +157,7 @@
                             </tr>
                         </table>
 
-                       
+
 
                     </div>
                 </div>
@@ -337,7 +337,8 @@
         }
 
         function showUser(data){
-            clearCompanyView();
+            // clearUserView();
+            console.log(data);
             $("#view-id").html(data['id']);
             $("#view-email").html(data['email']);
             $("#view-password-hash").html(data['passwordHash']);
