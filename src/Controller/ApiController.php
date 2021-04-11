@@ -47,7 +47,7 @@ class ApiController extends AbstractController
 
      * @return mixed
      */
-    public function userView(integer $id)
+    public function userView($id)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $companies = $repository->findBy('id',$id);
