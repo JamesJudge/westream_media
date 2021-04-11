@@ -306,6 +306,7 @@
                 console.log("Got " + data.length + " users");
                 var table = $("#tbody-companies");
                 table.empty();
+                data = JSON.parse(data);
                 console.log("Cleared tbody");
 
                 if(data.length < 1){
