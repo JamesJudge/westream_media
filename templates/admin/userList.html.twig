@@ -340,7 +340,7 @@
             // clearUserView();
             console.log(data);
             //TODO: add better error handling
-            if(data.length() != 1){alert("ERROR = numbr of users returned was not 1");}
+            if(data.length != 1){alert("ERROR = numbr of users returned was not 1");}
             data = data[0];
             $("#view-id").html(data['id']);
             $("#view-email").html(data['email']);
