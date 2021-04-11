@@ -86,6 +86,9 @@
                     <button type="button" class="add-stream" data-toggle="modal" data-target="#modal-add-stream" aria-label="Add Stream" id="btnAddStream">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Grant Streaming Permissions</span>
                     </button>
+                    <button type="button" class="remove-stream" data-toggle="modal" data-target="#modal-remove-stream" aria-label="Remove Stream" id="btnRemoveStream">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Revoke Streaming Permissions</span>
+                    </button>
                     <button type="button" class="edit" data-toggle="modal" data-target="#modal-company-form" aria-label="Edit" id="btnEditCompany">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
                     </button>
@@ -335,6 +338,15 @@
             $("#view-category").html(data['category']);
             $("#view-bio").html(data['bio']);
             document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            if(data['streamingKey'] != null){
+                document.getElementById('btnAddStream').hide();
+                document.getElementById('btnRemoveStream').show();
+            }else{
+                document.getElementById('btnAddStream').show();
+                document.getElementById('btnRemoveStream').hide();
+            }
+
+
 
             $('#modal-user-view').modal();
             //$("#no-contacts-found").show();
