@@ -339,11 +339,11 @@
             $("#view-bio").html(data['bio']);
             document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             if(data['streamingKey'] != null){
-                document.getElementById('btnAddStream').hide();
-                document.getElementById('btnRemoveStream').show();
+                $('#btnAddStream').hide();
+                $('#btnRemoveStream').show();
             }else{
-                document.getElementById('btnAddStream').show();
-                document.getElementById('btnRemoveStream').hide();
+                $('#btnAddStream').show();
+                $('#btnRemoveStream').hide();
             }
 
 
