@@ -99,11 +99,11 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modal-company-view">
+    <div class="modal fade" id="modal-user-view">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="view-title">Add / Edit Company</h4>
+                    <h4 class="modal-title" id="view-title">Add / Edit User - (No user selected)</h4>
                     <button type="button" class="edit" data-toggle="modal" data-target="#modal-company-form" aria-label="Edit" id="btnEditCompany">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
                     </button>
@@ -120,60 +120,40 @@
                                 <td id="view-id"></td>
                             </tr>
                             <tr>
-                                <th align="right">Primary Key</th>
-                                <td id="view-pri"></td>
+                                <th align="right">Nickname</th>
+                                <td id="view-nickname"></td>
                             </tr>
                             <tr>
-                                <th align="right">Company Name</th>
-                                <td id="view-companyName"></td>
+                                <th align="right">First Name</th>
+                                <td id="view-first-name"></td>
                             </tr>
                             <tr>
-                                <th align="right">Ticker</th>
-                                <td id="view-ticker"></td>
+                                <th align="right">Last Name</th>
+                                <td id="view-last-name"></td>
                             </tr>
                             <tr>
-                                <th align="right">Nick Name</th>
-                                <td id="view-nickName"></td>
+                                <th align="right">Email</th>
+                                <td id="view-email"></td>
                             </tr>
                             <tr>
-                                <th align="right">Address 1</th>
-                                <td id="view-address1"></td>
+                                <th align="right">Password</th>
+                                <td id="view-password-hash"></td>
                             </tr>
                             <tr>
-                                <th align="right">Address 2</th>
-                                <td id="view-address2"></td>
+                                <th align="right">Streaming Key</th>
+                                <td id="view-streaming-key"></td>
                             </tr>
                             <tr>
-                                <th align="right">City</th>
-                                <td id="view-city"></td>
+                                <th align="right">Profile Image</th>
+                                <td id="view-profile-image"></td>
                             </tr>
                             <tr>
-                                <th align="right">State</th>
-                                <td id="view-state"></td>
+                                <th align="right">Category</th>
+                                <td id="view-category"></td>
                             </tr>
                             <tr>
-                                <th align="right">Postal Code</th>
-                                <td id="view-postalCode"></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Home Country</th>
-                                <td id="view-homeCountry"></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Country of Origin</th>
-                                <td id="view-countryOfOrigin"></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Active</th>
-                                <td id="view-active"></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Deleted</th>
-                                <td id="view-deleted"></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Archived</th>
-                                <td id="view-archived"></td>
+                                <th align="right">Bio</th>
+                                <td id="view-bio"></td>
                             </tr>
                         </table>
 
@@ -396,26 +376,20 @@
         function showUser(data){
             clearCompanyView();
             $("#view-id").html(data['id']);
-            $("#view-pri").html(data['pri']);
-            $("#view-companyName").html(data['companyname']);
-            $("#view-ticker").html(data['ticker']);
-            $("#view-nickName").html(data['nickname']);
-            $("#view-address1").html(data['address1']);
-            $("#view-address2").html(data['Address2']);
-            $("#view-city").html(data['city']);
-            $("#view-state").html(data['state']);
-            $("#view-postalCode").html(data['postalcode']);
-            $("#view-homeCountry").html(data['homecountry']);
-            $("#view-countryOfOrigin").html(data['maincountryoforigin']);
-            data['active']?$("#view-active").html("Yes"):$("#view-active").html("No");
-            data['deleted']?$("#view-deleted").html("Yes"):$("#view-deleted").html("No");
-            data['archived']?$("#view-archived").html("Yes"):$("#view-archived").html("No");
-            $("#btnEditCompany").click(function(){editRow(data['id']);$("#modal-company-view").modal('hide');clearCompanyView()});
-            document.getElementById('view-title').innerHTML = 'Edit Company - ' + data['companyname'];
+            $("#view-email").html(data['email']);
+            $("#view-password-hash").html(data['passwordHash']);
+            $("#view-nickname").html(data['nickname']);
+            $("#view-first-name").html(data['firstName']);
+            $("#view-last-name").html(data['lastName']);
+            $("#view-streaming-key").html(data['streamingKey']);
+            $("#view-profile-image").html(data['profileImage']);
+            $("#view-category").html(data['category']);
+            $("#view-bio").html(data['bio']);
+            document.getElementById('view-title').innerHTML = 'Edit User - ' + data['nickname'];
 
-            $('#modal-company-view').modal();
-            $("#no-contacts-found").show();
-            $("#contactsTable").hide();
+            $('#modal-user-view').modal();
+            //$("#no-contacts-found").show();
+            //$("#contactsTable").hide();
             /*
             $("#contactsTable").DataTable({
                 "responsive": true,
@@ -423,7 +397,7 @@
             });
             */
             // get contacts via ajax
-            getContacts(data["id"]);
+            // getContacts(data["id"]);
         }
 
         function getContacts(id){
