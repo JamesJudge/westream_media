@@ -31,61 +31,40 @@
             </div>
             <div class="modal-body">
                 <div class="modal-body">
-                    <form id="companyForm" name="companyForm" method="post" action="/api/company/add">
-                        <input type="hidden" name="formId" value=""/>
-                        <input type="hidden" name="formPri" value=""/>
+                    <form id="user-form" name="userForm" method="post" action="/api/user/add">
+                        <input type="hidden" name="form-id" value=""/>
                         <table border="0">
                             <tr>
-                                <th align="right">Company Name</th>
-                                <td><input type="text" name="formCompanyName" id="formCompanyName"/></td>
+                                <th align="right">Nickname</th>
+                                <td><input type="text" name="nickname" id="form-nickname"/></td>
                             </tr>
                             <tr>
-                                <th align="right">Ticker</th>
-                                <td><input type="text" name="formTicker" id="formTicker"/></td>
+                                <th align="right">Email</th>
+                                <td><input type="text" name="email" id="form-email"/></td>
                             </tr>
                             <tr>
-                                <th align="right">Nick Name</th>
-                                <td><input type="text" name="formNickName" id="formNickName"/></td>
+                                <th align="right">First Name</th>
+                                <td><input type="text" name="firstName" id="form-first-name"/></td>
                             </tr>
                             <tr>
-                                <th align="right">Address 1</th>
-                                <td><input type="text" name="formAddress1" id="formAddress1"/></td>
+                                <th align="right">Last Name</th>
+                                <td><input type="text" name="lastName" id="form-last-name"/></td>
                             </tr>
                             <tr>
-                                <th align="right">Address 2</th>
-                                <td><input type="text" name="formAddress2" id="formAddress2"/></td>
+                                <th align="right">Password</th>
+                                <td><input type="text" name="passwordHash" id="form-password-hash"/></td>
                             </tr>
                             <tr>
-                                <th align="right">City</th>
-                                <td><input type="text" name="formCity" id="formCity"/></td>
+                                <th align="right">Streaming Key</th>
+                                <td><input type="text" name="streamingKey" id="form-streaming-key"/></td>
                             </tr>
                             <tr>
-                                <th align="right">State</th>
-                                <td><input type="text" name="formState" id="formState"/></td>
+                                <th align="right">Profile Pic</th>
+                                <td><input type="text" name="profileImage" id="form-profile-image"/></td>
                             </tr>
                             <tr>
-                                <th align="right">Postal Code</th>
-                                <td><input type="text" name="formPostalCode" id="formPostalCode"/></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Home Country</th>
-                                <td><input type="text" name="formHomeCountry" id="formHomeCountry"/></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Country of Origin</th>
-                                <td><input type="text" name="formCountryOfOrigin" id="formCountryOfOrigin"/></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Active</th>
-                                <td><label for="formActiveYes"><input type="radio" name="formActive" id="formActiveYes" checked/>Yes</label> &nbsp; <label for="formActiveNo"><input type="radio" name="formActive" id="formActiveNo"/>No</label></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Deleted</th>
-                                <td><label for="formDeletedYes"><input type="radio" name="formDeleted" id="formDeletedYes"/>Yes</label> &nbsp; <label for="formDeletedNo"><input type="radio" name="formDeleted" id="formDeletedNo" checked/>No</label></td>
-                            </tr>
-                            <tr>
-                                <th align="right">Archived</th>
-                                <td><label for="formArchivedYes"><input type="radio" name="formArchived" id="formArchivedYes"/>Yes</label> &nbsp; <label for="formArchivedNo"><input type="radio" name="formArchived" id="formArchivedNo" checked/>No</label></td>
+                                <th align="right">Bio</th>
+                                <td><input type="text" name="bio" id="form-bio"/></td>
                             </tr>
                             <tr>
                                 <td align="right"><button name="btnCancel" id="btnCancel" onclick="cancel()">Cancel</button></td>
@@ -306,11 +285,6 @@
                     "autoWidth": false,
                 });
             };
-
-
-            getUsers();
-
-
 
 
         });
