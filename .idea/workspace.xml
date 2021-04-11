@@ -2,14 +2,63 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce94bc38-ac5c-48a2-9b4a-c6f5efe00a42" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/westream_media.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/westream_media.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/chart.js/Chart.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/chart.js/Chart.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/chart.js/Chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/chart.js/Chart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/bower.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/bower.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/daterangepicker.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/daterangepicker.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/daterangepicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/daterangepicker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/require.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/amd/require.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/example/browserify/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/package.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/package.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/website.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/website.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/website.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/daterangepicker/website/website.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/filterizr/filterizr.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/filterizr/filterizr.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/filterizr/jquery.filterizr.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/filterizr/jquery.filterizr.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/filterizr/vanilla.filterizr.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/filterizr/vanilla.filterizr.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-bootstrap/main.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-bootstrap/main.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-bootstrap/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-bootstrap/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-daygrid/main.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-daygrid/main.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-daygrid/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-daygrid/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-interaction/main.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-interaction/main.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-interaction/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-interaction/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-timegrid/main.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-timegrid/main.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-timegrid/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar-timegrid/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar/main.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar/main.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/fullcalendar/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/fullcalendar/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/icheck-bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/icheck-bootstrap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/jquery-validation/additional-methods.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/jquery-validation/additional-methods.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/jquery-validation/jquery.validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/jquery-validation/jquery.validate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/jsgrid/i18n/jsgrid-ja.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/jsgrid/i18n/jsgrid-ja.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/js/OverlayScrollbars.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/js/OverlayScrollbars.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/pdfmake/pdfmake.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/pdfmake/pdfmake.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/pdfmake/vfs_fonts.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/pdfmake/vfs_fonts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/sparklines/sparkline.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/sparklines/sparkline.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin/userList.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/userList.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" notifyAboutMissingVendor="false" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -336,6 +385,7 @@
       <workItem from="1554421236796" duration="4783000" />
       <workItem from="1555092008900" duration="1321000" />
       <workItem from="1617733891746" duration="604000" />
+      <workItem from="1618150021523" duration="300000" />
     </task>
     <servers />
   </component>
