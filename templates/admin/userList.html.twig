@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="modal fade" id="modal-company-form">
+    <div class="modal fade" id="modal-user-form">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -32,7 +32,7 @@
             <div class="modal-body">
                 <div class="modal-body">
                     <form id="user-form" name="userForm" method="post" action="/api/user/add">
-                        <input type="hidden" name="form-id" value=""/>
+                        <input type="hidden" name="form-id" id="form-id" value=""/>
                         <table border="0">
                             <tr>
                                 <th align="right">Nickname</th>
@@ -150,7 +150,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- END view user modal window -->
 
     <div class="container-fluid">
@@ -364,120 +364,13 @@
             // getContacts(data["id"]);
         }
 
-        function getContacts(id){
-            $.get("/api/company/"+rowIdentifier+"/contacts", function(data, status){
-                //alert("Data: " + data + "\nStatus: " + status);
-                if(status == 'success'){
-                    console.log("Got contacts data");
-                    gotContacts(data);
-                }else{
-                    alert("Ajax error occurred");
-                    console.log(data);
-                    console.log(data.length);
-                }
-            });
-        }
-
-        function gotContacts(data){
-            console.log("Got " + data.length + " contacts");
-            var table = $("#view-company-contacts");
-            table.empty();
-            console.log("Cleared contacts");
-
-            if(data.length < 1){
-                console.log("No data returned");
-                $("#contactsTable").hide();
-                $("#no-contacts-found").show();
-                return false;
-            }
-
-            //Add the data rows.
-            var cell = "";
-            var row = "";
-            for (var i = 0; i < data.length; i++) {
-                row = $("<tr id='"+data[i]["id"]+"'/>");
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["companyname"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["title"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["name"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["address"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["website"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["emails"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["phones"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + data[i]["socialmedia"]+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["active"]?'Y':'N')+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["deleted"]?'Y':'N')+"</a>");
-                row.append(cell);
-
-                cell = $("<td />");
-                cell.html("<a href='#'  onclick=\"viewRow('" + data[i]["id"] + "')\">" + (data[i]["archived"]?'Y':'N')+"</a>");
-                row.append(cell);
-
-                table.append(row);
-            }
-            $("#contactsTable").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-            });
-        }
-
-
-
-        function clearCompanyView(){
-            $("#view-id").html('');
-            $("#formPri").html('');
-            $("#formCompanyName").html('');
-            $("#formTicker").html('');
-            $("#formNickName").html('');
-            $("#formAddress1").html('');
-            $("#formAddress2").html('');
-            $("#formCity").html('');
-            $("#formState").html('');
-            $("#formPostalCode").html('');
-            $("#formHomeCountry").html('');
-            $("#formCountryOfOrigin").html('');
-            $("#view-active").html('');
-            $("#view-deleted").html('');
-            $("#view-archived").html('');
-
-            document.getElementById('form-title').innerHTML = 'Edit Company - No company data loaded';
-        }
-
 
         function editRow(rowIdentifier){
-            $.get("/api/company/"+rowIdentifier, function(data, status){
+            $.get("/api/user/"+rowIdentifier, function(data, status){
                 //alert("Data: " + data + "\nStatus: " + status);
                 if(status == 'success'){
-                    console.log("Got company data");
-                    gotCompany(data);
+                    console.log("Got user data");
+                    gotUser(data);
                 }else{
                     alert("Ajax error occurred");
                     console.log(data);
@@ -487,6 +380,7 @@
         }
 
         function gotCompany(data){
+            data = JSON.parse(data);
             console.log(data['companyname']);
             document.forms['companyForm'].reset();
             $("#formId").val(data['id']);
