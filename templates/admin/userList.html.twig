@@ -32,7 +32,7 @@
             <div class="modal-body">
                 <div class="modal-body">
                     <form id="user-form" name="userForm" method="post" action="/api/user/add">
-                        <input type="hidden" name="form-id" id="form-id" value=""/>
+                        <input type="hidden" name="id" id="form-id" value=""/>
                         <table border="0">
                             <tr>
                                 <th align="right">Nickname</th>
@@ -379,27 +379,19 @@
             });
         }
 
-        function gotCompany(data){
+        function gotUser(data){
+            //wdit user modal
+
             data = JSON.parse(data);
             console.log(data);
-            document.forms['companyForm'].reset();
-            $("#formId").val(data['id']);
-            $("#formPri").val(data['pri']);
-            $("#formCompanyName").val(data['companyname']);
-            $("#formTicker").val(data['ticker']);
-            $("#formNickName").val(data['nickname']);
-            $("#formAddress1").val(data['address1']);
-            $("#formAddress2").val(data['Address2']);
-            $("#formCity").val(data['city']);
-            $("#formState").val(data['state']);
-            $("#formPostalCode").val(data['postalcode']);
-            $("#formHomeCountry").val(data['homecountry']);
-            $("#formCountryOfOrigin").val(data['maincountryoforigin']);
-            data['active']?$("#formActiveYes").checked = true:$("#formActiveNo").checked = true;
-            data['deleted']?$("#formDeletedYes").checked = true:$("#formDeletedNo").checked = true;
-            data['archived']?$("#formArchivedYes").checked = true:$("#formArchivedNo").checked = true;
+            document.forms['userForm'].reset();
+            $("#form-id").val(data['id']);
+            $("#form-first-name").val(data['firstName']);
+            $("#form-last-name").val(data['lasName']);
+            $("#form-email").val(data['email']);
+            $("#form-nickname").val(data['nickname']);
 
-            document.getElementById('form-title').innerHTML = 'Edit Company';
+            document.getElementById('form-title').innerHTML = 'Edit User';
             $('#modal-company-form').modal();
         }
 
