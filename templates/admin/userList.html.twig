@@ -381,7 +381,7 @@
 
         function gotCompany(data){
             data = JSON.parse(data);
-            console.log(data['companyname']);
+            console.log(data);
             document.forms['companyForm'].reset();
             $("#formId").val(data['id']);
             $("#formPri").val(data['pri']);
