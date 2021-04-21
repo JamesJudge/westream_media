@@ -362,7 +362,7 @@
             $("#view-profile-image").html('<img src="/assets/profile/' + data['profileImage'] + '" style="width:50%;"/>');
             $("#form-profile-image").val(data['profileImage']);
             $("#view-category").html(data['category']);
-            $("#view-bio").html(data['bio']);
+//            $("#view-bio").html(data['bio']);
             document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             if(data['streamingKey'] != null){
                 $('#btnAddStream').hide();
