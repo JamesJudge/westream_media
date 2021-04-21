@@ -340,7 +340,7 @@
             console.log('Form Email');
             $("#view-password-hash").html(data['passwordHash']);
             console.log('View fucking insecure password');
-            $("#form-password-hash").html(data['passwordHash']);
+            $("#form-password-hash").val(data['passwordHash']);
             console.log('EDIT fucking insecure password');
             // TODO: Actually hash passwords...
             $("#view-nickname").html(data['nickname']);
