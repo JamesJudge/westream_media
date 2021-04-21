@@ -313,7 +313,7 @@
             $.get("/api/user/"+rowIdentifier, function(data, status){
                 //alert("Data: " + data + "\nStatus: " + status);
                 if(status == 'success'){
-                    console.log("Got user data");
+                    console.log("Got user data to show");
                     data = JSON.parse(data);
                     showUser(data);
                 }else{
@@ -331,13 +331,22 @@
             if(data.length != 1){alert("ERROR = numbr of users returned was not 1");}
             data = data[0];
             $("#view-id").html(data['id']);
+            $("#form-id").val(data['id']);
             $("#view-email").html(data['email']);
+            $("#form-email").val(data['email']);
             $("#view-password-hash").html(data['passwordHash']);
+            $("#form-password-hash").html(data['passwordHash']);
+            TODO: Actually hash passwords...
             $("#view-nickname").html(data['nickname']);
+            $("#form-nickname").val(data['nickname']);
             $("#view-first-name").html(data['firstName']);
+            $("#form-first-name").val(data['firstName']);
             $("#view-last-name").html(data['lastName']);
+            $("#form-last-name").val(data['lastName']);
             $("#view-streaming-key").html(data['streamingKey']);
+            $("#form-streaming-key").html(data['streamingKey']);
             $("#view-profile-image").html(data['profileImage']);
+            $("#orm-profile-image").html(data['profileImage']);
             $("#view-category").html(data['category']);
             $("#view-bio").html(data['bio']);
             document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -366,6 +375,9 @@
 
 
         function editRow(rowIdentifier){
+            $('#modal-user-form').modal();
+            $('#modal-user-view').hide();
+
             $.get("/api/user/"+rowIdentifier, function(data, status){
                 //alert("Data: " + data + "\nStatus: " + status);
                 if(status == 'success'){
