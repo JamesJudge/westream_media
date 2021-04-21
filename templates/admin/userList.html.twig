@@ -383,6 +383,7 @@
             //wdit user modal
 
             data = JSON.parse(data);
+            data = data[0];
             console.log(data);
             document.forms['userForm'].reset();
             $("#form-id").val(data['id']);
