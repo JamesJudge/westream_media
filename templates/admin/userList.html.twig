@@ -327,7 +327,7 @@
         function showUser(data){
             // clearUserView();
             console.log(data);
-            //TODO: add better error handling
+            // TODO: add better error handling
             if(data.length != 1){alert("ERROR = numbr of users returned was not 1");}
             data = data[0];
             $("#view-id").html(data['id']);
@@ -336,7 +336,7 @@
             $("#form-email").val(data['email']);
             $("#view-password-hash").html(data['passwordHash']);
             $("#form-password-hash").html(data['passwordHash']);
-            TODO: Actually hash passwords...
+            // TODO: Actually hash passwords...
             $("#view-nickname").html(data['nickname']);
             $("#form-nickname").val(data['nickname']);
             $("#view-first-name").html(data['firstName']);
