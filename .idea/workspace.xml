@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ce94bc38-ac5c-48a2-9b4a-c6f5efe00a42" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin/userList.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/userList.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home/home.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home/home.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,7 +301,7 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="doctrine&#9;FILE&#9;file://D:/Downloads/symfony_projects/westream_media/config/packages/doctrine.yaml" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -337,7 +337,9 @@
       <workItem from="1554421236796" duration="4783000" />
       <workItem from="1555092008900" duration="1321000" />
       <workItem from="1617733891746" duration="604000" />
-      <workItem from="1618150021523" duration="19039000" />
+      <workItem from="1618150021523" duration="20946000" />
+      <workItem from="1618987726441" duration="57000" />
+      <workItem from="1618989335789" duration="580000" />
     </task>
     <servers />
   </component>
@@ -415,6 +417,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
