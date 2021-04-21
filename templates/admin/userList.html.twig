@@ -331,21 +331,36 @@
             if(data.length != 1){alert("ERROR = numbr of users returned was not 1");}
             data = data[0];
             $("#view-id").html(data['id']);
+            cpnsole.log('View ID');
             $("#form-id").val(data['id']);
+            cpnsole.log('Form ID');
             $("#view-email").html(data['email']);
+            cpnsole.log('View Email');
             $("#form-email").val(data['email']);
+            cpnsole.log('Form Email');
             $("#view-password-hash").html(data['passwordHash']);
+            cpnsole.log('View fucking insecure password');
             $("#form-password-hash").html(data['passwordHash']);
+            cpnsole.log('EDIT fucking insecure password');
             // TODO: Actually hash passwords...
             $("#view-nickname").html(data['nickname']);
+            cpnsole.log('View nickname');
             $("#form-nickname").val(data['nickname']);
+            cpnsole.log('Form nickname');
             $("#view-first-name").html(data['firstName']);
+            cpnsole.log('View firstName');
             $("#form-first-name").val(data['firstName']);
+            cpnsole.log('Form firstName');
             $("#view-last-name").html(data['lastName']);
+            cpnsole.log('View lasName');
             $("#form-last-name").val(data['lastName']);
+            cpnsole.log('Form lastName');
             $("#view-streaming-key").html(data['streamingKey']);
+            cpnsole.log('View streamingKey');
             $("#form-streaming-key").html(data['streamingKey']);
+            cpnsole.log('Form streamingKey');
             $("#view-profile-image").html(data['profileImage']);
+            
             $("#orm-profile-image").html(data['profileImage']);
             $("#view-category").html(data['category']);
             $("#view-bio").html(data['bio']);
