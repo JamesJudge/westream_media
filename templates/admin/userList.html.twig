@@ -357,11 +357,10 @@
             console.log('Form lastName');
             $("#view-streaming-key").html(data['streamingKey']);
             console.log('View streamingKey');
-            $("#form-streaming-key").html(data['streamingKey']);
+            $("#form-streaming-key").val(data['streamingKey']);
             console.log('Form streamingKey');
-            $("#view-profile-image").html(data['profileImage']);
-            
-            $("#orm-profile-image").html(data['profileImage']);
+            $("#view-profile-image").html('<img src="/assets/profile/' + data['profileImage'] + '" style="width:50%;"/>);
+            $("#orm-profile-image").val(data['profileImage']);
             $("#view-category").html(data['category']);
             $("#view-bio").html(data['bio']);
             document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
