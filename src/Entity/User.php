@@ -67,6 +67,14 @@ class User
      */
     private $bio;
 
+    /**
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    private $streamingServer;
+
+
+
+
     public function getId(): ?int
     {
         return $this->id;
