@@ -390,7 +390,7 @@
 
         function editRow(rowIdentifier){
             $('#modal-user-form').modal();
-            $('#modal-user-view').hide();
+            $('#modal-user-view').modal();
 
             $.get("/api/user/"+rowIdentifier, function(data, status){
                 //alert("Data: " + data + "\nStatus: " + status);
