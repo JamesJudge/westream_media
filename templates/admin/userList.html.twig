@@ -327,7 +327,9 @@
         function editClick(){
             console.log('editClick() executed');
             $('#modal-user-form').modal({show:true});
-            $('#modal-user-view').modal({show:false});
+            console.log("Showed user form");
+            $('#modal-user-view').modal({hide:true});
+            console.log("Hid user view");
         }
 
 
