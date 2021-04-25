@@ -126,6 +126,10 @@
                                 <td id="view-password-hash"></td>
                             </tr>
                             <tr>
+                                <th align="right">Streaming Server</th>
+                                <td id="view-streaming-server"></td>
+                            </tr>
+                            <tr>
                                 <th align="right">Streaming Key</th>
                                 <td id="view-streaming-key"></td>
                             </tr>
@@ -373,6 +377,14 @@
             console.log('View streamingKey');
             $("#form-streaming-key").val(data['streamingKey']);
             console.log('Form streamingKey');
+            $("#view-streaming-key").html(data['streamingKey']);
+            console.log('View streamingKey');
+            // todo: adding streaming key - view, then form
+            <tr>
+                <th align="right">Streaming Server</th>
+                <td id="view-streaming-server"></td>
+            </tr>
+
             $("#view-profile-image").html('<img src="/assets/profile/' + data['profileImage'] + '" style="width:50%;"/>');
             $("#form-profile-image").val(data['profileImage']);
             $("#view-category").html(data['category']);
