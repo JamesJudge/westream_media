@@ -90,7 +90,7 @@
                     <button type="button" class="remove-stream" data-toggle="modal" data-target="#modal-remove-stream" aria-label="Remove Stream" id="btnRemoveStream">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Pause Streaming</span>
                     </button>
-                    <button type="button" class="edit" data-toggle="modal" data-target="#modal-user-view, #modal-user-form " aria-label="Edit" id="btnEditUser">
+                    <button type="button" class="edit" data-toggle="modal" data-target="#modal-user-form, #modal-user-view " aria-label="Edit" id="btnEditUser">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
                     </button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -388,6 +388,8 @@
         }
 
 
+        // seems to be deprecated.
+        // TODO: DELETE THIS FUNCTION
         function editRow(rowIdentifier){
             console.log('editRow('+rowIdentifier+');');
             $('#modal-user-form').modal();
