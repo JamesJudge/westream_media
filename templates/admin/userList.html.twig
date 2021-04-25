@@ -67,7 +67,7 @@
                                 <td><input type="text" name="bio" id="form-bio"/></td>
                             </tr>
                             <tr>
-                                <td align="right"><button name="btnCancel" id="btnCancel" onclick="cancel()">Cancel</button></td>
+                                <td align="right"><button name="btnCancel" id="btnCancel" onclick="editUserCancel()">Cancel</button></td>
                                 <td><button name="btnSave" id="btnSave" onclick="save()">Save</button></td>
                             </tr>
                         </table>
@@ -330,6 +330,11 @@
             console.log("Showed user form");
             $('#modal-user-view').modal('hide');
             console.log("Hid user view");
+        }
+
+        function editCancel(){
+            console.log('editClick() executed');
+            $('#modal-user-form').modal('hide');
         }
 
 
