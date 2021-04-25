@@ -381,11 +381,10 @@
             console.log('View streamingKey');
             $("#form-streaming-key").val(data['streamingKey']);
             console.log('Form streamingKey');
-            $("#view-streaming-key").html(data['streamingKey']);
-            console.log('View streamingKey');
-            // todo: adding streaming key - view, then form
-
-
+            $("#view-streaming-server").html(data['streamingServer']);
+            console.log('View streamingServer');
+            $("#form-streaming-server").html(data['streamingServer']);
+            console.log('View streamingServer');
             $("#view-profile-image").html('<img src="/assets/profile/' + data['profileImage'] + '" style="width:50%;"/>');
             $("#form-profile-image").val(data['profileImage']);
             $("#view-category").html(data['category']);
