@@ -72,6 +72,11 @@ class User
      */
     private $streamingServer;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $streamingserver;
+
 
 
 
@@ -195,6 +200,18 @@ class User
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getStreamingserver(): ?string
+    {
+        return $this->streamingserver;
+    }
+
+    public function setStreamingserver(?string $streamingserver): self
+    {
+        $this->streamingserver = $streamingserver;
 
         return $this;
     }
