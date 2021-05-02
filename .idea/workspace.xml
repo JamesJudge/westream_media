@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce94bc38-ac5c-48a2-9b4a-c6f5efe00a42" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/admin/userList.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin/userList.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -299,6 +298,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SearchEverywhereHistoryKey" value="doctrine&#9;FILE&#9;file://D:/Downloads/symfony_projects/westream_media/config/packages/doctrine.yaml" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -342,6 +343,7 @@
       <workItem from="1618987726441" duration="57000" />
       <workItem from="1618989335789" duration="9228000" />
       <workItem from="1619307515768" duration="9748000" />
+      <workItem from="1619996983132" duration="745000" />
     </task>
     <servers />
   </component>
