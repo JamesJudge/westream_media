@@ -383,8 +383,8 @@
             console.log('Form streamingKey');
             $("#view-streaming-server").html(data['streamingserver']);
             console.log('View streamingServer');
-            $("#form-streaming-server").html(data['streamingserver']);
-            console.log('View streamingServer');
+            $("#form-streaming-server").val(data['streamingserver']);
+            console.log('form streamingServer');
             $("#view-profile-image").html('<img src="/assets/profile/' + data['profileImage'] + '" style="width:50%;"/>');
             $("#form-profile-image").val(data['profileImage']);
             $("#view-category").html(data['category']);
