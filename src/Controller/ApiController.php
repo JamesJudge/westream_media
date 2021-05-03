@@ -67,7 +67,7 @@ class ApiController extends AbstractController
 
 
     /**
-     * * @Route(path="/api/user/post", methods={"POST"})
+     * * @Route(path="/api/user/add", methods={"POST"})
      * @param $request
      * @return mixed
      */
