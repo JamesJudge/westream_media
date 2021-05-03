@@ -31,7 +31,7 @@
             </div>
             <div class="modal-body">
                 <div class="modal-body">
-                    <form id="user-form" name="userForm" method="post" action="/api/user/add">
+                    <form id="user-form" name="userForm" method="post" action="/api/user/post">
                         <input type="hidden" name="id" id="form-id" value=""/>
                         <table border="0">
                             <tr>
@@ -400,9 +400,6 @@
                 $('#btnAddStream').show();
                 $('#btnRemoveStream').hide();
             }
-
-
-
             $('#modal-user-view').modal();
             //$("#no-contacts-found").show();
             //$("#contactsTable").hide();

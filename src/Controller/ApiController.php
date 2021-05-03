@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use ContainerIozxIel\getJmsSerializerService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,6 +64,42 @@ class ApiController extends AbstractController
 
         return $response;
     }
+
+
+    /**
+     * * @Route(path="/api/user/post", methods={"POST"})
+     * @param $request
+     * @return mixed
+     */
+    public function userPost(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $id = $request->get('id');
+        if($id){
+            $user = $repository->findBy(['id'=>$id]);
+            $user->setNickname($request->get('nickname'));
+            // TODO: finish update code
+            $user->save();
+        }else{
+            // TODO: write add record code
+        }
+
+
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($user, 'json');
+
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/json');
+        $response->setContent($serializer->serialize($jsonContent, 'json'));
+
+        return $response;
+    }
+
+
 
 
 
