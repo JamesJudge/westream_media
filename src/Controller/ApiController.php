@@ -21,6 +21,16 @@ use Symfony\Component\Serializer\Serializer;
  */
 class ApiController extends AbstractController
 {
+
+    private function getCurrentUser(){
+        $currentUser = $this->get('session')->get('user');
+        return $currentUser;
+    }
+
+
+
+
+
     /**
      * * @Route(path="/api/users", methods={"GET"})
      * @return mixed
@@ -107,9 +117,9 @@ class ApiController extends AbstractController
      */
     public function userPic(Request $request)
     {
-
         $repository = $this->getDoctrine()->getRepository(User::class);
         $id = $request->get('id');
+        $currentUser = $this->getCurrentUser();
         if($id){
             $user = $repository->findBy(['id'=>$id]);
 
@@ -117,8 +127,10 @@ class ApiController extends AbstractController
 
         $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp'); // valid extensions
         $path = dirname(dirname(__FILE__)).'/assets/profile/'; // upload directory
-        if(!empty($_POST['nickname']) && $_FILES['image'])
+        if(!empty($request->get('nickname')) && $_FILES['image'])
         {
+
+        }
             $nickname = $_POST['nickname'];
             $img = $_FILES['image']['name'];
             $tmp = $_FILES['image']['tmp_name'];
@@ -166,7 +178,7 @@ class ApiController extends AbstractController
         }
 
 
-        /*
+
 
 
 
@@ -186,7 +198,7 @@ class ApiController extends AbstractController
             // TODO: write add record code
         }
 
-*/
+
 
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
