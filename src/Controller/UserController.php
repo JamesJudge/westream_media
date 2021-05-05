@@ -300,7 +300,6 @@ class UserController extends AbstractController
             'user' => $user,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,
-            'currentNickname' => $currentNickname, //todo: deprecate this
             'section'=>'users',
             'currentUser'=>$this->getCurrentUser(),
         ]);
