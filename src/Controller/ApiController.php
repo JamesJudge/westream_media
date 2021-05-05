@@ -111,26 +111,28 @@ class ApiController extends AbstractController
 
 
     /**
-     * * @Route(path="/api/user/profile/pic/", methods={"POST"})
+     * * @Route(path="/profile/{nickname}/photo", methods={"POST"})
      * @param $request
+     * @param $nickname
      * @return mixed
      */
-    public function userPic(Request $request)
+    public function userPic(Request $request, $nickname)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $id = $request->get('id');
+        $nickname = $request->get('nickname');
         $currentUser = $this->getCurrentUser();
-        if($id){
-            $user = $repository->findBy(['id'=>$id]);
-
-
-
-        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp'); // valid extensions
-        $path = dirname(dirname(__FILE__)).'/assets/profile/'; // upload directory
-        if(!empty($request->get('nickname')) && $_FILES['image'])
-        {
-
-        }
+        if($nickname){
+            $user = $repository->findBy(['nickname'=>$nickname]);
+            $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp'); // valid extensions
+            $path = dirname(dirname(__FILE__)).'/assets/profile/'; // upload directory
+            if(!empty($request->get('nickname')) && $user->getNickname && $_FILES['image'])
+            {
+                throw new \Exception("Ready to upload");
+            }
+            else
+            {
+                throw new \Exception("Failed upload test");
+            }
             $nickname = $_POST['nickname'];
             $img = $_FILES['image']['name'];
             $tmp = $_FILES['image']['tmp_name'];

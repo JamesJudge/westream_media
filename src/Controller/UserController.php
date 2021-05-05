@@ -8,6 +8,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Routing\Annotation\Route;
@@ -78,16 +79,22 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/profile/photo")
+     * @Route("/profile/{nickname}/photo")
      * @return mixed
      */
-    public function profilePhoto(Request $request)
+    public function profilePhoto(Request $request, $nickname)
     {
 
         $repository = $this->getDoctrine()->getRepository(User::class);
+        $streamingUser = $repository->findOneBy(['nickname'=>$nickname]);
+
         $currentUser = $repository->findBy(['nickname' => $this->getCurrentUser()->getNickname()]);
 
-
+        if($streamingUser->id != $currentUser->id){
+            throw new Exception("Correct user");
+        }else{
+            throw new Exception("Not correct user");
+        }
 
         /*
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
