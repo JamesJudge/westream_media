@@ -53,7 +53,7 @@
             $("#form").on('submit',(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: "ajaxupload.php",
+                    url: "/api/user/{{ currentUser }}",
                     type: "POST",
                     data:  new FormData(this),
                     contentType: false,

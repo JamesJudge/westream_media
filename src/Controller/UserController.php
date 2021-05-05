@@ -89,27 +89,20 @@ class UserController extends AbstractController
 
 
 
-
+        /*
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
             ->add('profileImage', TextType::class, ['label' => 'Profile Image', 'attr' => ['id' => 'uploadImage']])
             ->getForm();
 
 
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-        }
-
-
+        */
 
 
 
          return $this->render('user/profileImage.html.twig', [
             'section'=>'users',
             'currentUser'=>$this->getCurrentUser(),
-             'form'=>$form->createView(),
         ]);
 
 
