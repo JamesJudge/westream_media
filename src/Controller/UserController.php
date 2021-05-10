@@ -327,12 +327,23 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        $profileImageError = '';
+        $validateFields = array('email' => '', 'nickname' => '', 'firstName' => '', 'lastName' => '', 'profileImage' => '');
         if ($form->isSubmitted()) {
             $profileImage = $form->get('profileImage')->getData();
-            if ($form->isValid()) {
-                $user = $form->getData();
 
+            $nickname = $form->get('nickname')->getData();
+            $uniqueUsers = $repository->findBy(['nickname' => trim($nickname)]);
+            $uniqueError = false;
+            foreach ($uniqueUsers as $uniqueUser) {
+                if ($uniqueUser->getId() != $userId) {
+                    $uniqueError = true;
+                }
+            }
+
+            if ($form->isValid() && !$uniqueError) {
+                $userEmail = $user->getEmail();
+                $user = $form->getData();
+                $user->setEmail($userEmail);
                 //  upload zprofile image
                 if ($profileImage) {
                     $profileImageName = uniqid().'.'.$profileImage->guessExtension();
@@ -361,10 +372,17 @@ class UserController extends AbstractController
 
             } else {
 
-                $errors = $form['profileImage']->getErrors();
-                foreach ($errors as $error) {
-                    $profileImageError = $error->getMessage();
+                foreach ($validateFields as $key => $checkError) {
+                    if ($key == 'nickname' && $uniqueError) {
+                        $validateFields[$key] = 'Nickname not available';
+                    } else {
+                        $errors = $form[$key]->getErrors();
+                        foreach ($errors as $k => $error) {
+                            $validateFields[$key] = $error->getMessage();
+                        }
+                    }
                 }
+
             }
         }
 
@@ -372,7 +390,7 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'currentUser'=>$this->getCurrentUser(),
             'errors' => $form->getErrors(),
-            'profileImageError' => $profileImageError
+            'validateFields' => $validateFields
         ]);
     }
 

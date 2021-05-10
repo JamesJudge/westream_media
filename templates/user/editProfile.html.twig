@@ -49,6 +49,8 @@
                 <h2>Edit Profile</h2>
             </div>
 
+            {{ form_errors(form) }}
+
             {% for error in errors %}
                 <li>{{ error.message }}</li>
             {% endfor %}
@@ -62,6 +64,7 @@
                     <div class="form-left">
                     {{ form_widget(form.email) }}
                     </div>
+                    <span class="errorMsg">{{ validateFields.email }}</span>
                 </div>
             </div>
 
@@ -74,6 +77,7 @@
                     <div class="form-left">
                     {{ form_widget(form.nickname) }}
                     </div>
+                    <span class="errorMsg">{{ validateFields.nickname }}</span>
                 </div>
             </div>
 
@@ -86,6 +90,7 @@
                     <div class="form-left">
                     {{ form_widget(form.firstName) }}
                     </div>
+                    <span class="errorMsg">{{ validateFields.firstName }}</span>
                 </div>
             </div>
 
@@ -99,6 +104,7 @@
                     {{ form_widget(form.lastName) }}
                     </div>
                 </div>
+                <span class="errorMsg">{{ validateFields.lastName }}</span>
             </div>
             
             <div class="row">
@@ -110,7 +116,7 @@
                     <div class="form-left">
                     {{ form_widget(form.profileImage) }}
                     </div>
-                    <span class="errorMsg">{{ profileImageError }}</span>
+                    <span class="errorMsg">{{ validateFields.profileImage }}</span>
                 </div>
             </div>
 
@@ -122,6 +128,18 @@
                 <div class="col-lg-6">
                     <div class="form-left">
                     {{ form_widget(form.category) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">&nbsp;</div>
+                <div class="col-lg-3">
+                    {{ form_label(form.bio) }}
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-left">
+                    {{ form_widget(form.bio) }}
                     </div>
                 </div>
             </div>
