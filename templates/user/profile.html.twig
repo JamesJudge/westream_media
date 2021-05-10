@@ -8,18 +8,35 @@
         .standard-westream{
             color:white;
         }
-    </style>
 
+        .succMsg {
+            background: #28a745;
+            color: white;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
 
     <section class="contact-section">
         <div class="container">
+            {% for flashMessages in app.session.flashbag.all() %}
+                {% for flashMessage in flashMessages %}
+                    <div class="alert succMsg" style="background: #28a745; color: white;">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endfor %}
+
             <div class="section-title text-center">
                 <br/>
                 <h2>User Profile -  {{ nickname }}</h2>
+                {% if canEdit %}
+                    <span class="standard-westream">
+                        <a href="/profile/edit/{{user.id}}">Edit</a>
+                        <!--<img src="/assets/img/icons/pencil.png" width="20" height="20">-->
+                    </span>
+                {% endif %}
             </div>
+
             {% if nickname == currentNickname %}
                 <!--
                 <div class="row">
@@ -30,8 +47,6 @@
                 </div>
                 -->
             {% endif %}
-
-
 
             <div class="row">
                 <div class="col-md-8">
