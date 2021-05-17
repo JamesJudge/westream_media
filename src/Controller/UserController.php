@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use App\Form\Type\UserType;
+use Symfony\Component\Validator\Constraints\File;
 
 class UserController extends AbstractController
 {
@@ -291,29 +293,106 @@ class UserController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$nickname]);
-
         $currentUser = $this->get('session')->get('user');
         //
         $currentNickname = empty($currentUser)?null:$currentUser->getNickname();
+
+        $canEdit = false;
+        if ($user && $this->get('session')->get('user')) {
+            $canEdit = ($user->getId() == $this->get('session')->get('user')->getId()) ? 1 : 0;
+        }
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,
             'section'=>'users',
-            'currentUser'=>$this->getCurrentUser(),
+            'currentNickname'=> $this->getCurrentUser(),
+            'canEdit' => $canEdit
         ]);
     }
 
+    /**
+     * @Route("/profile/edit/{id}")
+     * @return mixed
+     */
+    public function editProfile(Request $request)
+    {
+        $currentUser = $this->get('session')->get('user');
+        $userId = $currentUser->getId();
+        
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $user = $repository->findOneBy(['id' => $userId]);
 
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
+        $validateFields = array('email' => '', 'nickname' => '', 'firstName' => '', 'lastName' => '', 'profileImage' => '');
+        if ($form->isSubmitted()) {
+            $profileImage = $form->get('profileImage')->getData();
 
+            $nickname = $form->get('nickname')->getData();
+            $uniqueUsers = $repository->findBy(['nickname' => trim($nickname)]);
+            $uniqueError = false;
+            foreach ($uniqueUsers as $uniqueUser) {
+                if ($uniqueUser->getId() != $userId) {
+                    $uniqueError = true;
+                }
+            }
 
+            if ($form->isValid() && !$uniqueError) {
+                $userEmail = $user->getEmail();
+                $user = $form->getData();
+                $user->setEmail($userEmail);
+                //  upload zprofile image
+                if ($profileImage) {
+                    $profileImageName = uniqid().'.'.$profileImage->guessExtension();
+                    try {
+                        $profileImage->move(
+                            $this->getParameter('user_profile_path'),
+                            $profileImageName
+                        );
 
+                        if ($user->getProfileImage() && file_exists($this->getParameter('user_profile_path').$user->getProfileImage())) {
+                            unlink($this->getParameter('user_profile_path').$user->getProfileImage());
+                        }                    
+                    } catch (FileException $e) {
+                    }
 
+                    $user->setProfileImage($profileImageName);
+                }
+                //  end of upload zprofile image
 
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
 
+                $this->addFlash('user_profile_edited_success', 'User profile updated successfully');
+                return $this->redirect('/profile/'.$user->getNickname());
 
+            } else {
+
+                foreach ($validateFields as $key => $checkError) {
+                    if ($key == 'nickname' && $uniqueError) {
+                        $validateFields[$key] = 'Nickname not available';
+                    } else {
+                        $errors = $form[$key]->getErrors();
+                        foreach ($errors as $k => $error) {
+                            $validateFields[$key] = $error->getMessage();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return $this->render('user/editProfile.html.twig', [
+            'form' => $form->createView(),
+            'currentUser'=>$this->getCurrentUser(),
+            'errors' => $form->getErrors(),
+            'validateFields' => $validateFields
+        ]);
+    }
 
     /**
      * @Route("/list/profiles/")
@@ -329,9 +408,5 @@ class UserController extends AbstractController
             'currentUser'=>$this->getCurrentUser(),
         ]);
     }
-
-
-
-
 
 }
