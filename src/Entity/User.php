@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Show;
+
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -77,8 +81,21 @@ class User
      */
     private $streamingserver;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Show::class, mappedBy="user", cascade="remove")
+     **/
+    private $shows;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user", cascade="remove")
+     */
+    private $orders;
 
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+        $this->shows = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -216,7 +233,54 @@ class User
         return $this;
     }
 
+    public function getShows()
+    {
+        return $this->shows;
+    }
 
+    public function hasShow(Show $show)
+    {
+        return $this->shows->contains($show);
+    }
 
+    public function addShow(Show $show)
+    {
+        $this->shows->add($show);
+    }
+
+    public function removeShow(Show $show)
+    {
+        $this->shows->removeElement($show);
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUserId() === $this) {
+                $order->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
 
 }
