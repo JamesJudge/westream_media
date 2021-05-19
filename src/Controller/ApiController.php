@@ -3,17 +3,22 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\Show;
+
 use ContainerIozxIel\getJmsSerializerService;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\User;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class ApiController
@@ -27,9 +32,73 @@ class ApiController extends AbstractController
         return $currentUser;
     }
 
+    /**
+     * * @Route(path="/api/user/isUserLoggedIn", methods={"GET"})
+     * @return mixed
+     */
+    public function isUserLoggedIn()
+    {
+        $currentUser = $this->getCurrentUser();            
+        $jsonContent = array(
+            'isUserLoggedIn' => ((!empty($currentUser)) ? true : false),
+            'currentTimestamp' => time()
+        );
 
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
 
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/json');
+        $response->setContent($serializer->serialize($jsonContent, 'json'));
 
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/order/post/{showId}", methods={"POST"})
+     * @param $request
+     * @return mixed
+     */
+    public function orderPost($showId, Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        $userRepo = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepo->find($currentUser->getId());
+
+        $showRepo = $this->getDoctrine()->getRepository(Show::class);
+        $show = $showRepo->find($showId);
+
+        $data = $request->request->all();
+
+        $order = new Order();
+        $order->setUser($user);
+        $order->setShow($show);
+        $order->setAmount($data['amount']);
+        $order->setPaymentDate(new \DateTime($data['update_time']));
+        $order->setPaymentStatus($data['status']);
+        $order->setConfirmationCode($data['orderId']);
+        $order->setPaymentResponse(json_encode($data));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        //$jsonContent = $serializer->serialize($order, 'json', ['groups' => ['order']]);
+        $jsonContent = array('status' => 'SUCCESS');
+
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/json');
+        $response->setContent($serializer->serialize($jsonContent, 'json'));
+
+        return $response;
+    }
 
     /**
      * * @Route(path="/api/users", methods={"GET"})

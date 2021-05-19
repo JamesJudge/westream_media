@@ -8,6 +8,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Show;
+use App\Entity\Order;
+
 use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -242,6 +245,10 @@ class UserController extends AbstractController
      */
     public function login(Request $request)
     {
+        if ($this->getCurrentUser()) {
+            return $this->redirect('/');
+        }
+
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
             ->add('email', TextType::class, ['label' => 'Email Address'])
             ->add('passwordHash', PasswordType::class, ['label' => 'Password'])
@@ -291,24 +298,48 @@ class UserController extends AbstractController
      */
     public function viewProfile($nickname)
     {
+        //  venues
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$nickname]);
+
         $currentUser = $this->get('session')->get('user');
-        //
         $currentNickname = empty($currentUser)?null:$currentUser->getNickname();
 
         $canEdit = false;
-        if ($user && $this->get('session')->get('user')) {
+        if ($user && !empty($currentUser)) {
             $canEdit = ($user->getId() == $this->get('session')->get('user')->getId()) ? 1 : 0;
         }
 
+        //  venues (shows)
+        $showRepo = $this->getDoctrine()->getRepository(Show::class);
+        $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
+
+        if (!empty($currentUser) && count($shows)) {
+            foreach ($shows as $show) {
+                $usrs = $show->getUser();
+                $showOrders = $show->getOrders();
+                foreach ($showOrders as $showOrder) {
+                    if ($showOrder->getUser()->getId() == $currentUser->getId()) {
+                        $show->setOrdered(true);
+                    }
+                }
+            }
+        }
+
+        //  viewer (orders)
+        $orderRepo = $this->getDoctrine()->getRepository(Order::class);
+        $orders = $orderRepo->findBy(['user' => $currentUser]);
+
         return $this->render('user/profile.html.twig', [
             'user' => $user,
+            'shows' => $shows,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,
+            'currentTimestamp' => time(),
             'section'=>'users',
             'currentNickname'=> $this->getCurrentUser(),
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'isUserLoggedIn' => $currentUser,
         ]);
     }
 
