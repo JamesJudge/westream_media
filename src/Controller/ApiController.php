@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -32,6 +34,27 @@ class ApiController extends AbstractController
         return $currentUser;
     }
 
+    public function getResponse($dataObject, $doDoubleSerialize = true)
+    {
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object;
+            },
+        ];
+        $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/json');
+
+        $jsonContent = $doDoubleSerialize ? $serializer->serialize($dataObject, 'json') : $dataObject;
+        $response->setContent($serializer->serialize($jsonContent, 'json'));
+
+        return $response;
+    }
+
     /**
      * * @Route(path="/api/user/isUserLoggedIn", methods={"GET"})
      * @return mixed
@@ -49,6 +72,7 @@ class ApiController extends AbstractController
             $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
         }
 
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -57,7 +81,9 @@ class ApiController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($jsonContent, false);
         return $response;
     }
 
@@ -91,17 +117,19 @@ class ApiController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        //$jsonContent = $serializer->serialize($order, 'json', ['groups' => ['order']]);
         $jsonContent = array('status' => 'SUCCESS');
 
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($jsonContent, false);
         return $response;
     }
 
@@ -113,6 +141,7 @@ class ApiController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $companies = $repository->findAll();
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -122,7 +151,9 @@ class ApiController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($companies);
         return $response;
     }
 
@@ -136,6 +167,7 @@ class ApiController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findBy(['id'=>$id]);
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -145,7 +177,9 @@ class ApiController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($user);
         return $response;
     }
 
@@ -168,8 +202,7 @@ class ApiController extends AbstractController
             // TODO: write add record code
         }
 
-
-
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -179,7 +212,9 @@ class ApiController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($user);
         return $response;
     }
 
@@ -275,7 +310,7 @@ class ApiController extends AbstractController
         }
 
 
-
+        /*
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -285,7 +320,9 @@ class ApiController extends AbstractController
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/json');
         $response->setContent($serializer->serialize($jsonContent, 'json'));
+        */
 
+        $response = $this->getResponse($user, false);
         return $response;
     }
 
