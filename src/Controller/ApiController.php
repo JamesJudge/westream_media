@@ -36,13 +36,18 @@ class ApiController extends AbstractController
      * * @Route(path="/api/user/isUserLoggedIn", methods={"GET"})
      * @return mixed
      */
-    public function isUserLoggedIn()
+    public function isUserLoggedIn(Request $request)
     {
         $currentUser = $this->getCurrentUser();            
         $jsonContent = array(
             'isUserLoggedIn' => ((!empty($currentUser)) ? true : false),
             'currentTimestamp' => time()
         );
+
+        if ($request->get('fromPurchaseTicket') && empty($currentUser)) {
+            $redirectUrl = '/profile/'.$request->get('venueName');
+            $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
+        }
 
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];

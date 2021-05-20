@@ -206,6 +206,7 @@ class UserController extends AbstractController
                 $user->setNickname($userData['nickname']);
                 $user->setFirstName($userData['firstName']);
                 $user->setLastName($userData['lastName']);
+                $user->setUserType('viewer');
 
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -264,6 +265,9 @@ class UserController extends AbstractController
             $user = $repository->findOneBy(['email'=>$userData['email'], 'passwordHash'=>$userData['passwordHash']]);
             if(!empty($user)){
                 $this->get('session')->set('user', $user);
+                if ($this->get('session')->get('purchaseTicketRedirectUrl')) {
+                    return $this->redirect(base64_decode($this->get('session')->get('purchaseTicketRedirectUrl')));
+                }
                 return $this->redirect('/profile/'.$user->getNickname());
             }else{
                 $form->addError(new \Symfony\Component\Form\FormError("Log-in Failed. Please try again."));
@@ -302,7 +306,7 @@ class UserController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$nickname]);
 
-        $currentUser = $this->get('session')->get('user');
+        $currentUser = $this->getCurrentUser();
         $currentNickname = empty($currentUser)?null:$currentUser->getNickname();
 
         $canEdit = false;
@@ -313,7 +317,6 @@ class UserController extends AbstractController
         //  venues (shows)
         $showRepo = $this->getDoctrine()->getRepository(Show::class);
         $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
-
         if (!empty($currentUser) && count($shows)) {
             foreach ($shows as $show) {
                 $usrs = $show->getUser();
@@ -333,11 +336,12 @@ class UserController extends AbstractController
         return $this->render('user/profile.html.twig', [
             'user' => $user,
             'shows' => $shows,
+            'orders' => $orders,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,
             'currentTimestamp' => time(),
             'section'=>'users',
-            'currentNickname'=> $this->getCurrentUser(),
+            'currentNickname'=> ($currentUser) ? $currentUser->getNickName() : '',
             'canEdit' => $canEdit,
             'isUserLoggedIn' => $currentUser,
         ]);

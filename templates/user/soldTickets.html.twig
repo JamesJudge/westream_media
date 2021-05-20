@@ -1,0 +1,48 @@
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div style="text-align: center;"><h4>Sold Tickets</h4></div>
+<div>&nbsp;</div>
+{% if shows %}
+    <table class="table my-table">
+        <tbody>
+            {% for show in shows %}
+                <tr style="background:#ffe400;">
+                    <td colspan="4"><h4 style="color:black;">{{ show.eventName }}</h4></td>
+                </tr>
+
+                {% set orders = show.orders %}
+
+                {% if orders.count > 0 %}
+                    <tr>
+                        <th width="45%">User</th>
+                        <th width="20%">Start Date</th>
+                        <th width="20%">End Date</th>
+                        <th width="15%">Amount</th>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No records</td>
+                    </tr>
+                {% endif %}
+
+                {% for order in orders %}
+                    {% set user = order.user %}
+                    <tr>
+                        <td>{{ user.nickName }}</td>
+                        <td>{{ show.start|date("Y-m-d H:i:s") }}</td>
+                        <td>{{ show.end|date("Y-m-d H:i:s") }}</td>
+                        <td>${{ order.amount }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <table class="table my-table">
+        <thead>
+            <tr>
+                <th>No events found</th>
+            </tr>
+        </thead>
+    </table>
+{% endif %}

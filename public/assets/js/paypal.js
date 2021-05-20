@@ -2,15 +2,15 @@ var FUNDING_SOURCES = [
     paypal.FUNDING.PAYPAL
 ];
 
-function purchaseTicket(showId, amount, showEndTime) {
+function purchaseTicket(venueName, showId, amount, showEndTime) {
 
-	$.when(isUserLoggedIn(showId)).then(function(data, textStatus, jqXHR) {
-		
+	$.when(isUserLoggedIn(venueName)).then(function(data, textStatus, jqXHR) {
+
 		if (textStatus == 'success') {
 			if (!data.isUserLoggedIn) {
 		
 				window.location.href = '/login';
-		
+
 			} else {
 		
 				if (data.currentTimestamp > showEndTime) {
@@ -98,8 +98,6 @@ function purchaseTicket(showId, amount, showEndTime) {
 						onError: function (err) {
 							alert('Something going wrong, please try again');
 							window.location.reload();
-							// For example, redirect to a specific error page
-							//window.location.href = "/your-error-page-here";
 						}
 				    });
 
@@ -123,10 +121,11 @@ function cancelTicket(showId) {
     $('.paypal-button-container').attr('id', '');
 }
 
-function isUserLoggedIn() {
+function isUserLoggedIn(venueName) {
 	return $.ajax({
 		url: '/api/user/isUserLoggedIn',
-        type: 'GET'
+        type: 'GET',
+        data: {'fromPurchaseTicket': true, 'venueName': venueName}
     });
 }
 
