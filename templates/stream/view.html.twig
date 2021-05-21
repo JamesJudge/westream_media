@@ -85,7 +85,7 @@
         // JS for chat server
         // create a new WebSocket object.
         var msgBox = $('#message-box');
-        var wsUri = "ws://live.jamesjudge.info:9000/assets/poc/server.php";
+        var wsUri = "wss://testing.videovoyager.org:9000/poc/server.php";
         websocket = new WebSocket(wsUri);
 
         websocket.onopen = function(ev) { // connection is open
