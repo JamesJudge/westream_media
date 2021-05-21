@@ -94,78 +94,21 @@
                 {% endif %}
             {% endif %}
 
-            {% if nickname != currentNickname %}
-                <div>&nbsp;</div>
-                <div>&nbsp;</div>
-                <div style="text-align: center;"><h4>Shows/Events</h4></div>
-                <div>&nbsp;</div>
-                {% if shows %}
-                    <table class="table my-table">
-                        <thead>
-                            <tr>
-                                <th width="25%">Start Date</th>
-                                <th width="25%">End Date</th>
-                                <th width="10%">Amount</th>
-                                <th width="15%">Watch Stram</th>
-                                <th width="25%">Payment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for show in shows %}
-                                <tr>
-                                    <td scope="row">{{ show.start|date("Y-m-d H:i:s") }}</td>
-                                    <td>{{ show.end|date("Y-m-d H:i:s") }}</td>
-                                    <td>${{ show.amount }}</td>
-                                    <td>
-                                        {% if show.isOrdered %}
-                                            {% if (isUserLoggedIn and currentTimestamp > show.end|date("U")) %}
-                                                Completed
-                                            {% else %}
-                                                <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
-                                            {% endif %}
-                                        {% else %}
-                                            {% if (isUserLoggedIn and currentTimestamp > show.end|date("U")) %}
-                                                Missed
-                                            {% elseif (isUserLoggedIn and currentTimestamp < show.end|date("U")) %}
-                                                Watch stream
-                                            {% else %}
-                                                <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
-                                            {% endif %}
-                                            
-                                        {% endif %}
-                                    </td>
-                                    <td id="ordered_{{show.id}}" >
-                                        {% if isUserLoggedIn and show.isOrdered %}
-                                            {{ (isUserLoggedIn and currentTimestamp > show.end|date("U")) ? 'Ordered' : 'Ordered' }}
-                                        {% elseif isUserLoggedIn and currentTimestamp > show.end|date("U") %}
-                                            -
-                                        {% else %}
-                                            <div class="paypal-button-container"></div>
-                                            
-                                            <a id="purchaseTicket{{show.id}}" href="javascript:void(0);" onclick="purchaseTicket({{show.id}}, {{show.amount}}, {{show.end|date("U")}})">Purchase Ticket</a>
-
-                                            <a id="cancelTicket{{show.id}}" class="hide" href="javascript:void(0);" onclick="cancelTicket({{show.id}})">Cancel</a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            {% if nickname == currentNickname %}
+                {% if user.streamingKey != '' %}
+                    {% include 'user/soldTickets.html.twig' %}
                 {% else %}
-                    <table class="table my-table">
-                        <thead>
-                            <tr>
-                                <th>No events found</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    {% include 'user/purchasedTickets.html.twig' %}
                 {% endif %}
+            {% endif %}
+
+            {% if nickname != currentNickname %}
+                {% include 'user/show.html.twig' %}
             {% endif %}
         </div>
     </section>
 
 {% endblock %}
-
 
 {% block javascripts %}
     {{ parent() }}

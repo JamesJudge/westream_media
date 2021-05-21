@@ -19,6 +19,17 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findUserByType($userType = 'venue') 
+    {
+        $whereCondition = ($userType == 'venue') ? 'IS NOT NULL' : 'IS NULL';
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.streamingKey '.$whereCondition)
+            ->orderBy('s.nickname', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

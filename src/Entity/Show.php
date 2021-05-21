@@ -51,6 +51,13 @@ class Show
 
     /**
      * @Groups("show")
+     * @ORM\Column(type="string", name="event_name", length=100)
+     * @SerializedName("eventName")
+     */
+    private $eventName;
+
+    /**
+     * @Groups("show")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
@@ -120,6 +127,18 @@ class Show
     public function setAmount(?float $amount): self
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getEventName(): ?string
+    {
+        return $this->eventName;
+    }
+
+    public function setEventName(string $eventName): self
+    {
+        $this->eventName = $eventName;
 
         return $this;
     }

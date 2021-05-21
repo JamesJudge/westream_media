@@ -3,15 +3,19 @@
 namespace App\Entity;
 
 use App\Entity\Show;
+use App\Repository\UserRepository;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="`user`")
  */
 class User
 {
@@ -80,6 +84,12 @@ class User
      * @ORM\Column(type="text", nullable=true)
      */
     private $streamingserver;
+
+    /**
+     * @ORM\Column(type="string", name="user_type", length=20)
+     * @SerializedName("userType")
+     */
+    private $userType;
 
     /**
      * @ORM\OneToMany(targetEntity=Show::class, mappedBy="user", cascade="remove")
@@ -229,6 +239,18 @@ class User
     public function setStreamingserver(?string $streamingserver): self
     {
         $this->streamingserver = $streamingserver;
+
+        return $this;
+    }
+
+    public function getUserType(): ?string
+    {
+        return $this->userType;
+    }
+
+    public function setUserType(?string $userType): self
+    {
+        $this->userType = $userType;
 
         return $this;
     }
