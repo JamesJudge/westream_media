@@ -6,8 +6,6 @@
 parameters:
     locale: 'en'
     user_profile_path: '%kernel.root_dir%/../public/assets/profile/'
-    #paypal_client_id: '{paypal_client_id}'
-    paypal_client_id: AYyvgJekdVn8BIZ88Zfv2JIwtV7PwL8nT7KptQPqQnobKLH_jByEC0yZk_B7SIk78b258hu7ZHCn9Dh3
 
 services:
     # default configuration for services in *this* file
