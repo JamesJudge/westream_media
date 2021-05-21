@@ -31,7 +31,7 @@
                 <!-- <li{% if section|default and section == 'chat' %} class="active"{% endif %}><a href="/list/chatrooms">Chat</a></li> -->
 
                 {% if currentUser|default %}
-                    <li{% if section|default and section == 'profile' %} class="active"{% endif %}><a href="/profile/{{ currentUser.nickname }}">My Profile</a></li>
+                    <li{% if section|default and section == 'profile' %} class="active"{% endif %}><a href="/profile/{{ currentUser.nickname }}">My Tickets</a></li>
                     <li{% if section|default and section == 'logout' %} class="active"{% endif %}><a href="/logout">Log Out</a></li>
                 {% else %}
                     <li{% if section|default and section == 'signup' %} class="active"{% endif %}><a href="/signup">Free Sign Up</a></li>
