@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce94bc38-ac5c-48a2-9b4a-c6f5efe00a42" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/admin-sidebar.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/admin-sidebar.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/list.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/profile.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -344,6 +347,7 @@
       <workItem from="1618989335789" duration="9228000" />
       <workItem from="1619307515768" duration="9748000" />
       <workItem from="1619996983132" duration="17080000" />
+      <workItem from="1621627781248" duration="1289000" />
     </task>
     <servers />
   </component>
