@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce94bc38-ac5c-48a2-9b4a-c6f5efe00a42" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/templates/includes/header.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/header.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/stream/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/stream/list.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -344,7 +344,7 @@
       <workItem from="1618989335789" duration="9228000" />
       <workItem from="1619307515768" duration="9748000" />
       <workItem from="1619996983132" duration="17080000" />
-      <workItem from="1621627781248" duration="1796000" />
+      <workItem from="1621627781248" duration="1972000" />
     </task>
     <servers />
   </component>
