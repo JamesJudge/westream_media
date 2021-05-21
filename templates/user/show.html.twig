@@ -18,8 +18,8 @@
             {% for show in shows %}
                 <tr>
                     <td>{{ show.eventName }}</td>
-                    <td>{{ show.start|date("Y-m-d H:i:s") }}</td>
-                    <td>{{ show.end|date("Y-m-d H:i:s") }}</td>
+                    <td>{{ show.start|date("Y-m-d H:i") }}</td>
+                    <td>{{ show.end|date("Y-m-d H:i") }}</td>
                     <td>${{ show.amount }}</td>
                     <td>
                         {% if show.isOrdered %}

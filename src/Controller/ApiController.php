@@ -20,16 +20,14 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
 /**
  * Class ApiController
  * @package App\Controller
  */
 class ApiController extends AbstractController
 {
-
-    private function getCurrentUser(){
+    private function getCurrentUser()
+    {
         $currentUser = $this->get('session')->get('user');
         return $currentUser;
     }
@@ -72,17 +70,6 @@ class ApiController extends AbstractController
             $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
         }
 
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
-
         $response = $this->getResponse($jsonContent, false);
         return $response;
     }
@@ -117,19 +104,97 @@ class ApiController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = array('status' => 'SUCCESS');
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
-
         $response = $this->getResponse($jsonContent, false);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/shows", methods={"GET"})
+     * @return mixed
+     */
+    public function showList()
+    {
+        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $shows = $repository->findAll();
+
+        $response = $this->getResponse($shows, false);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/show/{id}", methods={"GET"})
+     * @return mixed
+     */
+    public function showView($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $show = $repository->findBy(['id' => $id]);
+
+        $response = $this->getResponse($show, false);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/show", methods={"POST"})
+     * @param $request
+     * @return mixed
+     */
+    public function showPost(Request $request)
+    {
+        $userRepo = $this->getDoctrine()->getRepository(User::class);
+        $user = $userRepo->findOneBy(['id' => $request->get('user')]);
+
+        $show = new Show();
+        $show->setEventName($request->get('event_name'));
+        $show->setRecordedLink($request->get('recorded_link'));
+        $show->setStart(new \DateTime($request->get('start')));
+        $show->setEnd(new \DateTime($request->get('end')));
+        $show->setAmount($request->get('amount'));
+        $show->setUser($user);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($show);
+        $entityManager->flush();
+
+        $response = $this->getResponse($show, false);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/show/{id}", methods={"PUT"})
+     * @param $request
+     * @return mixed
+     */
+    public function showPut(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $id = $request->get('id');
+
+        $show = $repository->findOneBy(['id'=>$id]);
+        $show->setEventName($request->get('event_name'));
+        $show->setRecordedLink($request->get('recorded_link'));
+        $show->setStart(new \DateTime($request->get('start')));
+        $show->setEnd(new \DateTime($request->get('end')));
+        $show->setAmount($request->get('amount'));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($show);
+        $entityManager->flush();
+
+        $response = $this->getResponse($show, false);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/users/{userType}", methods={"GET"})
+     * @return mixed
+     */
+    public function userTypeList($userType)
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findUserByType($userType);
+
+        $response = $this->getResponse($users, false);
         return $response;
     }
 
@@ -141,48 +206,23 @@ class ApiController extends AbstractController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $companies = $repository->findAll();
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($companies, 'json');
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
 
         $response = $this->getResponse($companies);
         return $response;
     }
 
-
     /**
      * * @Route(path="/api/user/{id}", methods={"GET"})
-
      * @return mixed
      */
     public function userView($id)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findBy(['id'=>$id]);
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
 
         $response = $this->getResponse($user);
         return $response;
     }
-
 
     /**
      * * @Route(path="/api/user/post", methods={"POST"})
@@ -198,26 +238,13 @@ class ApiController extends AbstractController
             $user->setNickname($request->get('nickname'));
             // TODO: finish update code
             $user->save();
-        }else{
+        } else {
             // TODO: write add record code
         }
-
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
 
         $response = $this->getResponse($user);
         return $response;
     }
-
 
     /**
      * * @Route(path="/profile/{nickname}/photo", methods={"POST"})
@@ -255,27 +282,21 @@ class ApiController extends AbstractController
                 $final_image = strtolower($final_image);
                 $path = $path.strtolower($final_image);
 
-
-
                 if(move_uploaded_file($tmp,$path))
                 {
                     echo "<h3>Image Uploaded Successfully.</h3> <p><a href='/profile/$nickname'>Click here to go back to profile page</a></p> <img src='/assets/profile/$final_image' />";
 
-//include database configuration file
-/*
- * This is deprecated. Used for cheating. Do not re-use.
- */
+                    //include database configuration file
+                    /*
+                    * This is deprecated. Used for cheating. Do not re-use.
+                    */
                     //include_once 'db.php';
-//insert form data in the database
-
-
+                    //insert form data in the database
 
                     $insert = $conn->query("
                         update user 
                         set profile_image = '$final_image' 
                         where nickname='nickname';");
-
-//echo $insert?'ok':'err';
                 }else{
                     echo('<p style="color:red">Upload Error<br/>Path: '.$path.'<br/>Temp: '.$tmp.'</p>');
                 }
@@ -288,16 +309,6 @@ class ApiController extends AbstractController
             echo("Form Error");
         }
 
-
-
-
-
-
-
-
-
-
-
         $repository = $this->getDoctrine()->getRepository(User::class);
         $id = $request->get('id');
         if($id){
@@ -309,23 +320,8 @@ class ApiController extends AbstractController
             // TODO: write add record code
         }
 
-
-        /*
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/json');
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
-        */
-
         $response = $this->getResponse($user, false);
         return $response;
     }
-
-
 
 }
