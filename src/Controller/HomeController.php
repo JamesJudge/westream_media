@@ -28,15 +28,15 @@ class HomeController extends AbstractController
     public function view()
     {
         $url = "https://www.videovoyager.org";
-        return $this->redirect($url, 308);
-        /*
-         * currently deprecated and re-routed to home of www.videovoyager.org
-         
+        // return $this->redirect($url, 308);
+
+
+
         return $this->render('home/home.html.twig', [
             'section' => 'home',
             'currentUser' => $this->getCurrentUser(),
         ]);
-    */
+    
 
     }
 }
