@@ -36,7 +36,7 @@
 
             <div class="section-title text-center">
                 <br/>
-                <h2>User Profile -  {{ nickname }}</h2>
+                <h2>{{ nickname }}</h2>
                 {% if canEdit %}
                     <span class="standard-westream">
                         <a href="/profile/edit/{{user.id}}">Edit</a>
@@ -62,11 +62,11 @@
                     <div class="col-md-4">
                         <p>{%  if user.bio|default %}{{ user.bio|default }}{% else %}This user has no Bio. Sorry. {% endif %}</p>
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         {% if user.streamingKey != '' %}
                             <p><a href="/stream/view/{{ user.nickname }}">Watch stream</a></p>
                         {% endif %}
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-4">
                     <img src="/assets/profile/{% if user.profileImage|default %}{{ user.profileImage }}{% else %}blank-profile.png{% endif %}"/>
