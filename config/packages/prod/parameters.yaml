@@ -1,2 +1,4 @@
 parameters:
     paypal_client_id: paypalClientId
+    toRedirect: true
+    redrect_url: 'https://www.videovoyager.org'

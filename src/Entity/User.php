@@ -81,11 +81,6 @@ class User
     private $streamingServer;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $streamingserver;
-
-    /**
      * @ORM\Column(type="string", name="user_type", length=20)
      * @SerializedName("userType")
      */
@@ -231,14 +226,14 @@ class User
         return $this;
     }
 
-    public function getStreamingserver(): ?string
+    public function getStreamingServer(): ?string
     {
-        return $this->streamingserver;
+        return $this->streamingServer;
     }
 
-    public function setStreamingserver(?string $streamingserver): self
+    public function setStreamingServer(?string $streamingServer): self
     {
-        $this->streamingserver = $streamingserver;
+        $this->streamingServer = $streamingServer;
 
         return $this;
     }

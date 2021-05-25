@@ -11,6 +11,7 @@ use ContainerIozxIel\getJmsSerializerService;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -32,7 +33,7 @@ class ApiController extends AbstractController
         return $currentUser;
     }
 
-    public function getResponse($dataObject, $doDoubleSerialize = true)
+    public function getResponse($dataObject, $responseCode = '')
     {
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $defaultContext = [
@@ -43,12 +44,13 @@ class ApiController extends AbstractController
         $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
         $serializer = new Serializer($normalizers, $encoders);
 
+        $responseCode = ($responseCode == '') ? Response::HTTP_OK : $responseCode;
         $response = new Response();
-        $response->setStatusCode(Response::HTTP_OK);
+        $response->setStatusCode($responseCode);
         $response->headers->set('Content-Type', 'text/json');
 
-        $jsonContent = $doDoubleSerialize ? $serializer->serialize($dataObject, 'json') : $dataObject;
-        $response->setContent($serializer->serialize($jsonContent, 'json'));
+        $jsonContent = $serializer->serialize($dataObject, 'json');
+        $response->setContent($jsonContent, 'json');
 
         return $response;
     }
@@ -70,7 +72,7 @@ class ApiController extends AbstractController
             $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
         }
 
-        $response = $this->getResponse($jsonContent, false);
+        $response = $this->getResponse($jsonContent);
         return $response;
     }
 
@@ -104,7 +106,7 @@ class ApiController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        $response = $this->getResponse($jsonContent, false);
+        $response = $this->getResponse($jsonContent, Response::HTTP_CREATED);
         return $response;
     }
 
@@ -117,7 +119,7 @@ class ApiController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Show::class);
         $shows = $repository->findAll();
 
-        $response = $this->getResponse($shows, false);
+        $response = $this->getResponse($shows);
         return $response;
     }
 
@@ -130,7 +132,7 @@ class ApiController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Show::class);
         $show = $repository->findBy(['id' => $id]);
 
-        $response = $this->getResponse($show, false);
+        $response = $this->getResponse($show);
         return $response;
     }
 
@@ -156,7 +158,7 @@ class ApiController extends AbstractController
         $entityManager->persist($show);
         $entityManager->flush();
 
-        $response = $this->getResponse($show, false);
+        $response = $this->getResponse($show, Response::HTTP_CREATED);
         return $response;
     }
 
@@ -181,7 +183,7 @@ class ApiController extends AbstractController
         $entityManager->persist($show);
         $entityManager->flush();
 
-        $response = $this->getResponse($show, false);
+        $response = $this->getResponse($show);
         return $response;
     }
 
@@ -194,7 +196,7 @@ class ApiController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(User::class);
         $users = $repository->findUserByType($userType);
 
-        $response = $this->getResponse($users, false);
+        $response = $this->getResponse($users);
         return $response;
     }
 
@@ -225,12 +227,83 @@ class ApiController extends AbstractController
     }
 
     /**
-     * * @Route(path="/api/user/post", methods={"POST"})
+     * @param $request
+     * @return array
+     */
+    public function validateUser(Request $request, $id = '')
+    {
+        $errors = [];
+        $userRepo = $this->getDoctrine()->getRepository(User::class);
+
+        $emailUsers = $userRepo->findBy(['email' => $request->get('email')]);
+        foreach($emailUsers as $emailUser) {
+            if (!$id || ($id && $emailUser->getId() != $id)) {
+                $errors['email'] = 'Email already exists';
+            }
+        }
+
+        $nicknameUsers = $userRepo->findBy(['nickname' => $request->get('nickname')]);
+        foreach($nicknameUsers as $nicknameUser) {
+            if (!$id || ($id && $nicknameUser->getId() != $id)) {
+                $errors['nickname'] = 'Nickname already exists';
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param $user
+     * @return array
+     */
+    public function setUserData(User $user, Request $request)
+    {
+        $user->setEmail($request->get('email'));
+        $user->setNickname($request->get('nickname'));
+        $user->setFirstName($request->get('firstName'));
+        $user->setLastName($request->get('lastName'));
+        $user->setUserType($request->get('userType'));
+
+        if ($request->get('profileImage')) {
+            $user->setProfileImage($request->get('profileImage'));
+        }
+
+        if ($request->get('passwordHash')) {
+            $user->setPasswordHash($request->get('passwordHash'));
+        }
+
+        $user->setStreamingKey($request->get('streamingKey'));
+        $user->setStreamingServer($request->get('streamingServer'));
+        $user->setCategory($request->get('category'));
+        $user->setBio($request->get('bio'));
+
+        return $user;
+    }
+
+    /**
+     * * @Route(path="/api/user", methods={"POST"})
      * @param $request
      * @return mixed
      */
     public function userPost(Request $request)
     {
+        $errors = $this->validateUser($request);
+        if (count($errors)) {
+            $response = $this->getResponse($errors, Response::HTTP_CONFLICT);
+            return $response;
+        }
+
+        $user = new User();
+        $user = $this->setUserData($user, $request);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $response = $this->getResponse($user, Response::HTTP_CREATED);
+        return $response;
+
+        /*
         $repository = $this->getDoctrine()->getRepository(User::class);
         $id = $request->get('id');
         if($id){
@@ -243,6 +316,81 @@ class ApiController extends AbstractController
         }
 
         $response = $this->getResponse($user);
+        return $response;
+        */
+    }
+
+    /**
+     * * @Route(path="/api/user/{id}", methods={"PUT"})
+     * @param $request
+     * @return mixed
+     */
+    public function userPut(Request $request)
+    {
+        $id = $request->get('id');
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $user = $repository->findOneBy(['id' => $id]);
+
+        $errors = $this->validateUser($request, $id);
+        if (count($errors)) {
+            $response = $this->getResponse($errors, Response::HTTP_CONFLICT);
+            return $response;
+        }
+
+        $user = $this->setUserData($user, $request);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $response = $this->getResponse($user);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/user/profileImage", methods={"POST"})
+     * @param $request
+     * @return mixed
+     */
+    public function imageUploadAction(Request $request)
+    {
+        ini_set('upload_max_filesize', '1G');
+        ini_set('post_max_size', '1G');
+
+        $imageName = $request->headers->get('X-File-Name');
+        $imageType = $request->headers->get('X-File-Type');
+
+        if (empty($imageName) || empty($imageType)) {
+            $data = array('error' => 'Missing Data');
+            $response = $this->getResponse($data, Response::HTTP_PRECONDITION_FAILED);
+            return $response;
+        }
+
+        $validTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/bmp',
+        ];
+        if (!in_array($imageType, $validTypes)) {
+            $data = array('error' => 'Invalid image type');
+            $response = $this->getResponse($data, Response::HTTP_BAD_REQUEST);
+            return $response;
+        }
+
+        $profileImage = uniqid().'.'.pathinfo($imageName, PATHINFO_EXTENSION);
+        $profileImagePath = $this->getParameter('user_profile_path');
+
+        $file = file_put_contents($profileImagePath.'/'.$profileImage, file_get_contents('php://input'));
+        if (false === $file) {
+            $data = array('error' => 'Error Processing Request');
+            $response = $this->getResponse($data, Response::HTTP_BAD_REQUEST);
+            return $response;
+        }
+
+        $data = array('profileImage' => $profileImage);
+        $response = $this->getResponse($data);
         return $response;
     }
 
