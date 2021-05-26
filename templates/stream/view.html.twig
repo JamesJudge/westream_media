@@ -51,6 +51,9 @@
             background: #ffe300;
             box-shadow: 2px 2px 2px #0000001c;
         }
+        .center {
+            text-align: center;
+        }
     </style>
 {% endblock %}
 
@@ -73,6 +76,14 @@
                 <button id="send-message">Send</button>
             </div>
         </div>
+    {% elseif (ticksetPurchased == 0) %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
+        </div>
+        <div align="center"><h4>You have not purchased ticket of this venue</h4></div>
+        <div>&nbsp;</div>
+        <div class="center"><a href="/profile/{{ streamer }}">Click here to purchase ticket</a></div>
+        <div>&nbsp;</div>
     {% else %}
         <div class="section-title text-center">
             <h2>{{ streamer }}</h2>

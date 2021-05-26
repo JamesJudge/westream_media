@@ -50,6 +50,8 @@ class StreamController extends AbstractController
      */
     public function view($venueName)
     {
+        $this->get('session')->remove('viewStreamRedirectUrl');
+
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$venueName]);
 
@@ -62,6 +64,7 @@ class StreamController extends AbstractController
 
                 //  venues (shows)
                 $userShows = [];
+                $ticksetPurchased = 0;
                 $showEvent = false;
                 $currentTimeStamp = time();
                 $showRepo = $this->getDoctrine()->getRepository(Show::class);
@@ -71,7 +74,9 @@ class StreamController extends AbstractController
                     foreach ($shows as $show) {
                         $showOrders = $show->getOrders();
                         foreach ($showOrders as $showOrder) {
-                            if ($showOrder->getUser()->getId() == $currentUser->getId()) {                                
+                            if ($showOrder->getUser()->getId() == $currentUser->getId()) {
+                                $ticksetPurchased++;
+
                                 if ($show->getStart()->getTimeStamp() <= $currentTimeStamp && $currentTimeStamp <= $show->getEnd()->getTimeStamp()) {
                                     $showEvent = true;
                                 }
@@ -79,7 +84,7 @@ class StreamController extends AbstractController
                         }
                     }
                 } else {
-                    return $this->redirect('/profile/'.$venueName);
+                    //return $this->redirect('/profile/'.$venueName);
                 }
 
                 return $this->render('stream/view.html.twig', [
@@ -88,13 +93,14 @@ class StreamController extends AbstractController
                     'nickname' => $nickname,
                     'section' => 'live',
                     'showEvent' => $showEvent,
+                    'ticksetPurchased' => $ticksetPurchased,
                     'currentUser' => $currentUser,
                 ]);
 
             } else {
 
-                $redirectUrl = '/profile/'.$venueName;
-                $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
+                $redirectUrl = '/stream/view/'.$venueName;
+                $this->get('session')->set('viewStreamRedirectUrl', base64_encode($redirectUrl));
                 return $this->redirect('/login');
 
             }

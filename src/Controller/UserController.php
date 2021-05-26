@@ -209,9 +209,15 @@ class UserController extends AbstractController
             $user = $repository->findOneBy(['email'=>$userData['email'], 'passwordHash'=>$userData['passwordHash']]);
             if(!empty($user)){
                 $this->get('session')->set('user', $user);
+
                 if ($this->get('session')->get('purchaseTicketRedirectUrl')) {
                     return $this->redirect(base64_decode($this->get('session')->get('purchaseTicketRedirectUrl')));
                 }
+
+                if ($this->get('session')->get('viewStreamRedirectUrl')) {
+                    return $this->redirect(base64_decode($this->get('session')->get('viewStreamRedirectUrl')));
+                }
+
                 return $this->redirect('/profile/'.$user->getNickname());
             }else{
                 $form->addError(new \Symfony\Component\Form\FormError("Log-in Failed. Please try again."));
@@ -242,6 +248,8 @@ class UserController extends AbstractController
      */
     public function viewProfile($nickname)
     {
+        $this->get('session')->remove('purchaseTicketRedirectUrl');
+
         //  venues
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['nickname'=>$nickname]);
