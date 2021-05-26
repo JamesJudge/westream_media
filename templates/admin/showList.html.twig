@@ -18,7 +18,7 @@
             padding: 10px;
             margin-bottom: 10px;
             font-size: 20px;
-            width: 80%;
+            width: auto;
         }
         .hide {
             display: none;
@@ -51,7 +51,6 @@
             <div class="modal-body">
                 <div class="modal-body">
                     <form id="addShowForm" class="show-form" name="showForm" method="post">
-                        <div class="succMsg hide">Record added successfully</div>
                         <table border="0">
                             <tr>
                                 <th align="right">Event Name</th>
@@ -63,18 +62,33 @@
                             </tr>
                             <tr>
                                 <th align="right">Start</th>
-                                <td><input required readonly class="dateTime" type="text" name="start" id="frm-start"/></td>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="start" id="frm-start"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
+
                             <tr>
                                 <th align="right">End</th>
-                                <td><input required readonly class="dateTime" type="text" name="end" id="frm-end"/></td>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="end" id="frm-end"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <th align="right">Amount</th>
                                 <td><input required type="text" name="amount" id="frm-amount"/></td>
                             </tr>
                             <tr>
-                                <th align="right">User</th>
+                                <th align="right">Venue</th>
                                 <td>
                                     <div id="formUserList"></div>
                                 </td>
@@ -93,7 +107,6 @@
                     </form>
 
                     <form id="editShowForm" class="show-form" name="showForm" method="post">
-                        <div class="succMsg hide">Record edited successfully</div>
                         <input type="hidden" name="id" id="form-id" value=""/>
                         <table border="0">
                             <tr>
@@ -106,18 +119,32 @@
                             </tr>
                             <tr>
                                 <th align="right">Start</th>
-                                <td><input required readonly class="dateTime" type="text" name="start" id="form-start"/></td>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="start" id="form-start"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <th align="right">End</th>
-                                <td><input required readonly class="dateTime" type="text" name="end" id="form-end"/></td>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="end" id="form-end"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <th align="right">Amount</th>
                                 <td><input required type="text" name="amount" id="form-amount"/></td>
                             </tr>
                             <tr>
-                                <th align="right">User</th>
+                                <th align="right">Venue</th>
                                 <td>
                                     <span id="edit-form-user"></span>
                                 </td>
@@ -185,7 +212,7 @@
                                 <td id="view-amount"></td>
                             </tr>
                             <tr>
-                                <th align="right">User</th>
+                                <th align="right">Venue</th>
                                 <td id="view-user"></td>
                             </tr>
                         </table>
@@ -208,6 +235,7 @@
                         <div id="customButtons" style="margin-bottom:10px">
                             <button name="btnAdd" id="btnAdd" onclick="addShow()">Add New</button>
                         </div>
+                        <div class="succMsg hide"></div>
                         <table id="showTable" class="table table-bordered table-striped hover">
                             <thead>
                                 <tr>
@@ -216,7 +244,7 @@
                                     <th width="12%">Start</th>
                                     <th width="12%">End</th>
                                     <th width="10%">Amount</th>
-                                    <th width="20%">User</th>
+                                    <th width="20%">Venue</th>
                                 </tr>
                             </thead>
 
@@ -233,7 +261,7 @@
                                     <th>Start</th>
                                     <th>End</th>
                                     <th>Amount</th>
-                                    <th>User</th>
+                                    <th>Venue</th>
                                 </tr>
                             </tfoot>
                         </table>

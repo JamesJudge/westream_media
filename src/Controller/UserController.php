@@ -25,18 +25,12 @@ use Symfony\Component\Validator\Constraints\File;
 
 class UserController extends AbstractController
 {
-
     private function getCurrentUser(){
         $currentUser = $this->get('session')->get('user');
         return $currentUser;
     }
 
-
-
-
-
-
-    /**
+   /**
      * @Route("/chat/{nickname}")
      * @param $nickname
      * @param $popup
@@ -56,10 +50,6 @@ class UserController extends AbstractController
                 $nickname = 'Guest'.rnd(5);
             }
 
-
-
-
-
             return $this->render('user/chat.html.twig', [
                 'streamID'=>$streamingUser->getStreamingKey(),
                 'streamer'=>$streamingUser->getNickname(),
@@ -75,13 +65,7 @@ class UserController extends AbstractController
                 'currentUser' => $this->getCurrentUser(),
             ]);
         }
-
-
     }
-
-
-
-
 
     /**
      * @Route("/profile/{nickname}/photo")
@@ -89,7 +73,6 @@ class UserController extends AbstractController
      */
     public function profilePhoto(Request $request, $nickname)
     {
-
         $repository = $this->getDoctrine()->getRepository(User::class);
         $streamingUser = $repository->findOneBy(['nickname'=>$nickname]);
 
@@ -110,26 +93,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         */
 
-
-
-         return $this->render('user/profileImage.html.twig', [
+        return $this->render('user/profileImage.html.twig', [
             'section'=>'users',
             'currentUser'=>$this->getCurrentUser(),
         ]);
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * @Route("/category/{category}")
@@ -138,7 +106,6 @@ class UserController extends AbstractController
      */
     public function category($category)
     {
-
         $repository = $this->getDoctrine()->getRepository(User::class);
         $streamingUsers = $repository->findBy(['category' => $category]);
         //$streamingServer = "";
@@ -149,16 +116,9 @@ class UserController extends AbstractController
             'section'=>$category,
             'currentUser'=>$this->getCurrentUser(),
         ]);
-
-
     }
 
-
-
-
-
-
-        /**
+    /**
      * @Route("/signup")
      */
     public function new(Request $request)
@@ -166,7 +126,6 @@ class UserController extends AbstractController
         $section = 'signup';
 
         $user = new User();
-
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
             ->add('email', TextType::class, ['label' => 'Email Address'])
             ->add('passwordHash', PasswordType::class, ['label' => 'Password'])
@@ -175,17 +134,13 @@ class UserController extends AbstractController
             ->add('lastName', TextType::class, ['label' => 'Last Name'])
             ->getForm();
 
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-
             $userData = $form->getData();
             $repository = $this->getDoctrine()->getRepository(User::class);
             $emailCheck = $repository->findOneBy(['email'=>$userData['email']]);
             $nicknameCheck = $repository->findOneBy(['nickname'=>$userData['nickname']]);
             $process = true;
-
 
             if (!empty($emailCheck)) {
                 $form->addError(new \Symfony\Component\Form\FormError("Email address already exists"));
@@ -196,7 +151,6 @@ class UserController extends AbstractController
                 $form->addError(new \Symfony\Component\Form\FormError("Nickname already exists"));
                 $process = false;
             }
-
 
             if ($process) {
                 $entityManager = $this->getDoctrine()->getManager();
@@ -213,11 +167,7 @@ class UserController extends AbstractController
 
                 return $this->redirect('/signup/thank-you');
             }
-
-
-
         }
-
 
         return $this->render('signup/new.html.twig', [
             'form' => $form->createView(),
@@ -225,7 +175,6 @@ class UserController extends AbstractController
             'currentUser'=>$this->getCurrentUser(),
         ]);
     }
-
 
     /**
      * @Route("/signup/thank-you")
@@ -238,8 +187,6 @@ class UserController extends AbstractController
             'currentUser'=>$this->getCurrentUser(),
         ]);
     }
-
-
 
     /**
      * @Route("/login")
@@ -255,10 +202,7 @@ class UserController extends AbstractController
             ->add('passwordHash', PasswordType::class, ['label' => 'Password'])
             ->getForm();
 
-
         $form->handleRequest($request);
-
-
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
             $repository = $this->getDoctrine()->getRepository(User::class);
@@ -273,10 +217,6 @@ class UserController extends AbstractController
                 $form->addError(new \Symfony\Component\Form\FormError("Log-in Failed. Please try again."));
             }
         }
-
-
-
-
 
         return $this->render('login/login.html.twig', [
             'form' => $form->createView(),
@@ -319,7 +259,6 @@ class UserController extends AbstractController
         $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
         if (!empty($currentUser) && count($shows)) {
             foreach ($shows as $show) {
-                $usrs = $show->getUser();
                 $showOrders = $show->getOrders();
                 foreach ($showOrders as $showOrder) {
                     if ($showOrder->getUser()->getId() == $currentUser->getId()) {

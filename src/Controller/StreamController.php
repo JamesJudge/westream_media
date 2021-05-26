@@ -8,12 +8,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Show;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\Session;
-
-
 
 /**
  * Class StreamController
@@ -21,13 +21,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class StreamController extends AbstractController
 {
-
-
     private function getCurrentUser(){
         $currentUser = $this->get('session')->get('user');
         return $currentUser;
     }
-
 
     /**
      * @Route("/list/streams")
@@ -44,57 +41,73 @@ class StreamController extends AbstractController
             'section' => 'live',
             'currentUser' => $this->getCurrentUser(),
         ]);
-
-
-
     }
-
-
-
-
-
 
     /**
-     * @Route("/stream/view/{nickname}")
-     * @param $nickname
+     * @Route("/stream/view/{venueName}")
+     * @param $venueName
      * @return mixed
      */
-    public function view($nickname)
+    public function view($venueName)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $streamingUser = $repository->findOneBy(['nickname'=>$nickname]);
+        $user = $repository->findOneBy(['nickname'=>$venueName]);
 
-        if(!empty($streamingUser)){
-            $user = $this->get('session')->get('user');
-            if(!empty($user)){
-                $nickname = $user->getNickname();
-            }else{
-                $nickname = 'Guest'.rand(1,1000);
+        $currentUser = $this->getCurrentUser();
+        
+        if(!empty($user)) {
+
+            if(!empty($currentUser)){
+                $nickname = $currentUser->getNickname();
+
+                //  venues (shows)
+                $userShows = [];
+                $showEvent = false;
+                $currentTimeStamp = time();
+                $showRepo = $this->getDoctrine()->getRepository(Show::class);
+                $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
+
+                if (count($shows)) {
+                    foreach ($shows as $show) {
+                        $showOrders = $show->getOrders();
+                        foreach ($showOrders as $showOrder) {
+                            if ($showOrder->getUser()->getId() == $currentUser->getId()) {                                
+                                if ($show->getStart()->getTimeStamp() <= $currentTimeStamp && $currentTimeStamp <= $show->getEnd()->getTimeStamp()) {
+                                    $showEvent = true;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    return $this->redirect('/profile/'.$venueName);
+                }
+
+                return $this->render('stream/view.html.twig', [
+                    'streamID' => $user->getStreamingKey(),
+                    'streamer' => $venueName,
+                    'nickname' => $nickname,
+                    'section' => 'live',
+                    'showEvent' => $showEvent,
+                    'currentUser' => $currentUser,
+                ]);
+
+            } else {
+
+                $redirectUrl = '/profile/'.$venueName;
+                $this->get('session')->set('purchaseTicketRedirectUrl', base64_encode($redirectUrl));
+                return $this->redirect('/login');
+
             }
 
+        } else {
 
-
-
-
-            return $this->render('stream/view.html.twig', [
-                'streamID'=>$streamingUser->getStreamingKey(),
-                'streamer'=>$streamingUser->getNickname(),
-                'nickname'=>$nickname,
-                'section' => 'live',
-                'currentUser' => $this->getCurrentUser(),
-            ]);
-        }else{
             return $this->render('stream/notFound.html.twig', [
                 'section' => 'live',
-                'currentUser' => $this->getCurrentUser(),
+                'currentUser' => $currentUser,
             ]);
+
         }
-
-
     }
-
-
-
 
     /**
      * @Route("/stream/setup/instructions")
@@ -103,23 +116,9 @@ class StreamController extends AbstractController
      */
     public function setupInstructions()
     {
-
-
-
-
-
         return $this->render('stream/setupInstructions.html.twig', [
             'currentUser' => $this->getCurrentUser(),
         ]);
-
-
-
     }
 
-
-
-
-
-
-
-    }
+}

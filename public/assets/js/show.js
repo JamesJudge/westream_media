@@ -1,6 +1,13 @@
 var dataTable;
 
-$(".dateTime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+$(".dateTime").datetimepicker({
+    format: 'yyyy-mm-dd hh:ii',
+    autoclose: true,
+    todayBtn: true,
+    minuteStep: 15,
+    fontAwesome: true,
+    startDate: moment().format("YYYY-MM-DD HH:mm")
+});
 
 function getShows() {
     $.get("/api/shows", function(data, status) {
@@ -39,11 +46,11 @@ function gotShows(showData) {
         row.append(cell);
 
         cell = $("<td />");
-        cell.html("<a href='#'  onclick=\"viewRow('" + data.id + "')\">" + moment.unix(data.start.timestamp).format("YYYY-MM-DD hh:mm") +"</a>");
+        cell.html("<a href='#'  onclick=\"viewRow('" + data.id + "')\">" + moment.unix(data.start.timestamp).format("YYYY-MM-DD HH:mm") +"</a>");
         row.append(cell);
 
         cell = $("<td />");
-        cell.html("<a href='#'  onclick=\"viewRow('" + data.id + "')\">" + moment.unix(data.end.timestamp).format("YYYY-MM-DD hh:mm") +"</a>");
+        cell.html("<a href='#'  onclick=\"viewRow('" + data.id + "')\">" + moment.unix(data.end.timestamp).format("YYYY-MM-DD HH:mm") +"</a>");
         row.append(cell);
 
         cell = $("<td />");
@@ -69,7 +76,7 @@ function addShow() {
     $.when(getUserList('venue')).then(function(userData, textStatus, jqXHR) {
         if (userData.length) {
             var selTag = $('<select>').attr({'id': 'frm-user', 'required': true, 'class': 'selectTag'});
-            selTag.append($("<option>").attr('value', '').text('Select User'));
+            selTag.append($("<option>").attr('value', '').text('Select Venue'));
             $(userData).each(function(index, data) {
                 selTag.append($("<option>").attr('value', data.id).text(data.nickname));
             });
@@ -80,13 +87,9 @@ function addShow() {
         document.forms['showForm'].reset();
         document.getElementById('form-title').innerHTML = 'Add Show';
 
-        //$('.show-form').attr('id', 'addShowForm');
         $('.succMsg').addClass('hide');
         $('#addShowForm').removeClass('hide');
         $('#editShowForm').addClass('hide');
-
-        //$('#modal-show-form #btnEdit').addClass('hide');
-        //$('#modal-show-form #btnSave').removeClass('hide');
 
         $('#modal-show-form').modal();
     });
@@ -121,17 +124,32 @@ $("#addShowForm").on("submit", function(e) {
         url: "/api/show",
         method: 'POST',
         data: showData,
+        beforeSend: function() {
+            hideSuccMessage();
+        },
         success: function(data) {
             gotShow(data);
+            setTimeout(hideSuccMessage, 3000);
+            showSuccMessage('Record added successfully');
         },
         complete: function() {
-            $('.succMsg').removeClass('hide');
+            editShowCancel();
         },
         error: function() {
             alert("Error occurred");
         }
     });
 });
+
+function showSuccMessage (message) {
+    $('.succMsg').html(message);
+    $('.succMsg').removeClass('hide');
+}
+
+function hideSuccMessage () {
+    $('.succMsg').html('');
+    $('.succMsg').addClass('hide');
+}
 
 function getUserList(userType) {
     return $.get("/api/users/" + userType, function(data, status) {
@@ -161,10 +179,6 @@ function editClick() {
     $('.succMsg').addClass('hide');
     $('#addShowForm').addClass('hide');
     $('#editShowForm').removeClass('hide');
-    //$('.show-form').attr('id', 'editShowForm');
-
-    //$('#modal-show-form #btnSave').addClass('hide');
-    //$('#modal-show-form #btnEdit').removeClass('hide');
 
     $('#modal-show-form').modal({show:true});
     $('#modal-show-view').modal('hide');
@@ -190,11 +204,11 @@ function showShow(data){
     $("#view-recordedLink").html(data.recordedLink);
     $("#form-recordedLink").val(data.recordedLink);
 
-    $("#view-start").html(moment.unix(data.start.timestamp).format("YYYY-MM-DD hh:mm"));
-    $("#form-start").val(moment.unix(data.start.timestamp).format("YYYY-MM-DD hh:mm"));
+    $("#view-start").html(moment.unix(data.start.timestamp).format("YYYY-MM-DD HH:mm"));
+    $("#form-start").val(moment.unix(data.start.timestamp).format("YYYY-MM-DD HH:mm"));
 
-    $("#view-end").html(moment.unix(data.end.timestamp).format("YYYY-MM-DD hh:mm"));
-    $("#form-end").val(moment.unix(data.end.timestamp).format("YYYY-MM-DD hh:mm"));
+    $("#view-end").html(moment.unix(data.end.timestamp).format("YYYY-MM-DD HH:mm"));
+    $("#form-end").val(moment.unix(data.end.timestamp).format("YYYY-MM-DD HH:mm"));
 
     $("#view-amount").html(data.amount);
     $("#form-amount").val(data.amount);
@@ -241,11 +255,16 @@ $("#editShowForm").on("submit", function(e) {
         url: "/api/show/" + showId,
         method: 'PUT',
         data: showData,
+        beforeSend: function() {
+            hideSuccMessage();
+        },
         success: function(data) {
             gotShow(data);
+            setTimeout(hideSuccMessage, 3000);
+            showSuccMessage('Record edited successfully');
         },
         complete: function() {
-            $('.succMsg').removeClass('hide');
+            editShowCancel();
         },
         error: function() {
             alert("Error occurred");
@@ -253,57 +272,15 @@ $("#editShowForm").on("submit", function(e) {
     });    
 });
 
-//HERE GOES!
-function editShow1(e) {
-    e.preventDefault();
-
-    var showId, showData, errorCounter;
-
-    showId = $("#form-id").val();
-    showData = {
-        event_name: $("#form-eventName").val(),
-        recorded_link: $("#form-recordedLink").val(),
-        start: $("#form-start").val(),
-        end: $("#form-end").val(),
-        amount: $("#form-amount").val()
-    };
-
-    errorCounter = 0;
-    $.each(showData, function(index, data) {
-        if (data == '') {
-            errorCounter++;
-        }
-    });
-
-    if (errorCounter) {
-        return;
-    }
-
-    $.ajax({
-        url: "/api/show/" + showId,
-        method: 'PUT',
-        data: data,
-        success: function(data) {
-            gotShow(data);
-        },
-        error: function() {
-            alert("Ajax error occurred");
-            console.log(data);
-            console.log(data.length);
-        }
-    });
-}
-
 function gotShow(data){
     //wdit show modal
-    console.log('data: ', data);
     document.forms['showForm'].reset();
 
     $("#form-id").val(data.id);
     $("#form-eventName").val(data.eventName);
     $("#form-recordedLink").val(data.recordedLink);
-    $("#form-start").val(moment.unix(data.start.timestamp).format("YYYY-MM-DD hh:mm"));
-    $("#form-end").val(moment.unix(data.end.timestamp).format("YYYY-MM-DD hh:mm"));
+    $("#form-start").val(moment.unix(data.start.timestamp).format("YYYY-MM-DD HH:mm"));
+    $("#form-end").val(moment.unix(data.end.timestamp).format("YYYY-MM-DD HH:mm"));
     $("#form-amount").val(data.amount);
     $("#edit-form-user").val(data.user.nickname);
 

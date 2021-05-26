@@ -92,7 +92,8 @@ function addUser() {
     document.forms['addUserForm'].reset();
     document.getElementById('form-title').innerHTML = 'Add User';
 
-    $('.succMsg').addClass('hide');
+    hideSuccMessage();
+
     $('#addUserForm').removeClass('hide');
     $('#editUserForm').addClass('hide');
 
@@ -270,16 +271,18 @@ $("#addUserForm, #editUserForm").on("submit", function(e) {
         return;
     }
 
-    var url, method; 
+    var url, method, succMessage; 
     if (userFormName == 'editUserForm') {
         var userId = parseInt($("#" + formPredecessor + "-id").val());
 
         userData['id'] = userId;
         url = '/api/user/' + userId;
+        succMessage = 'Record edited successfully';
         method = "PUT";
     } else {
         url = '/api/user';
         method = "POST";
+        succMessage = 'Record added successfully';
     }
 
     $.ajax({
@@ -292,9 +295,11 @@ $("#addUserForm, #editUserForm").on("submit", function(e) {
         },
         success: function(data) {
             gotUser(data, userFormName);
-            $('.succMsg').removeClass('hide');
+            setTimeout(hideSuccMessage, 3000);
+            showSuccMessage(succMessage);
         },
         complete: function() {
+            editUserCancel();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.status == 409) {
@@ -314,6 +319,16 @@ $("#addUserForm, #editUserForm").on("submit", function(e) {
         }
     });    
 });
+
+function showSuccMessage (message) {
+    $('.succMsg').html(message);
+    $('.succMsg').removeClass('hide');
+}
+
+function hideSuccMessage () {
+    $('.succMsg').html('');
+    $('.succMsg').addClass('hide');
+}
 
 $("#form-image, #frm-image").on("change", function(e) {
     e.preventDefault();

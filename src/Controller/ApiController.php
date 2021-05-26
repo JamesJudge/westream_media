@@ -302,22 +302,6 @@ class ApiController extends AbstractController
 
         $response = $this->getResponse($user, Response::HTTP_CREATED);
         return $response;
-
-        /*
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $id = $request->get('id');
-        if($id){
-            $user = $repository->findBy(['id'=>$id]);
-            $user->setNickname($request->get('nickname'));
-            // TODO: finish update code
-            $user->save();
-        } else {
-            // TODO: write add record code
-        }
-
-        $response = $this->getResponse($user);
-        return $response;
-        */
     }
 
     /**

@@ -31,10 +31,14 @@
                         {% else %}
                             {% if (isUserLoggedIn and currentTimestamp > show.end|date("U")) %}
                                 Missed
-                            {% elseif (isUserLoggedIn and currentTimestamp < show.end|date("U")) %}
+                            {% elseif (isUserLoggedIn and currentTimestamp < show.start|date("U")) %}
                                 Watch stream
                             {% else %}
-                                <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
+                                {% if not isUserLoggedIn and currentTimestamp > show.end|date("U") %}
+                                    Missed
+                                {% else %}
+                                    <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </td>
@@ -46,7 +50,11 @@
                         {% else %}
                             <div class="paypal-button-container"></div>
                             
-                            <a id="purchaseTicket{{show.id}}" href="javascript:void(0);" onclick="purchaseTicket('{{nickname}}', {{show.id}}, {{show.amount}}, {{show.end|date("U")}})">Purchase Ticket</a>
+                            {% if (currentTimestamp > show.end|date("U")) %} 
+                                {{ '-' }}
+                            {% else %}
+                                <a id="purchaseTicket{{show.id}}" href="javascript:void(0);" onclick="purchaseTicket('{{nickname}}', {{show.id}}, {{show.amount}}, {{show.end|date("U")}})">Purchase Ticket</a>
+                            {% endif %}
 
                             <a id="cancelTicket{{show.id}}" class="hide" href="javascript:void(0);" onclick="cancelTicket({{show.id}})">Cancel</a>
                         {% endif %}

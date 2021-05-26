@@ -56,23 +56,30 @@
 
 {% block body %}
 
-    <div class="section-title text-center">
-        <h2>{{ streamer }}</h2>
-    </div>
-    <div class="chat-wrapper">
-        <div class="embed-responsive embed-responsive-16by9">
-            <!-- <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe> -->
-            <video id="video-player" controls playsinline></video>
+    {% if (showEvent)  %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
         </div>
+        <div class="chat-wrapper">
+            <div class="embed-responsive embed-responsive-16by9">
+                <!-- <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe> -->
+                <video id="video-player" controls playsinline></video>
+            </div>
 
-        <div id="message-box"></div>
-        <div class="user-panel">
-            <input type="hidden" name="name" id="name" value="{{ nickname }}" />
-            <input type="text" name="message" id="message" placeholder="Type your message here..." maxlength="255" />
-            <button id="send-message">Send</button>
+            <div id="message-box"></div>
+            <div class="user-panel">
+                <input type="hidden" name="name" id="name" value="{{ nickname }}" />
+                <input type="text" name="message" id="message" placeholder="Type your message here..." maxlength="255" />
+                <button id="send-message">Send</button>
+            </div>
         </div>
-    </div>
-
+    {% else %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
+        </div>
+        <div align="center"><h4>No any event going on current time</h4></div>
+        <div>&nbsp;</div>
+    {% endif %}
 
 {% endblock %}
 

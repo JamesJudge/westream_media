@@ -18,7 +18,7 @@
             padding: 10px;
             margin-bottom: 10px;
             font-size: 20px;
-            width: 80%;
+            width: auto;
         }
         .hide {
             display: none;
@@ -59,7 +59,6 @@
             <div class="modal-body">
                 <div class="modal-body">
                     <form id="addUserForm" class="user-form" name="addUserForm" method="post">
-                        <div class="succMsg hide">Record added successfully</div>
                         <table border="0">
                             <tbody class="valignTop">
                                 <tr>
@@ -137,7 +136,6 @@
                     </form>
 
                     <form id="editUserForm" class="user-form" name="editUserForm" method="put">
-                        <div class="succMsg hide">Record edited successfully</div>
                         <input type="hidden" name="id" id="form-id" value=""/>
 
                         <table border="0">
@@ -243,7 +241,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-body">
-
                         <table border="0">
                             <tbody class="valignTop">
                                 <tr>
@@ -316,6 +313,7 @@
                         <div id="customButtons" style="margin-bottom:10px">
                             <button name="btnAdd" id="btnAdd" onclick="addUser()">Add New</button>
                         </div>
+                        <div class="succMsg hide"></div>
                         <table id="userTable" class="table table-bordered table-striped hover">
                             <thead>
                             <tr>
