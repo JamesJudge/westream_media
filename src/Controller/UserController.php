@@ -156,7 +156,7 @@ class UserController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
 
                 $user->setEmail($userData['email']);
-                $user->setPasswordHash($userData['passwordHash']);
+                $user->setPasswordHash(password_hash($userData['passwordHash'], PASSWORD_DEFAULT));
                 $user->setNickname($userData['nickname']);
                 $user->setFirstName($userData['firstName']);
                 $user->setLastName($userData['lastName']);
@@ -205,9 +205,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
+
             $repository = $this->getDoctrine()->getRepository(User::class);
-            $user = $repository->findOneBy(['email'=>$userData['email'], 'passwordHash'=>$userData['passwordHash']]);
-            if(!empty($user)){
+            $user = $repository->findOneBy(['email' => $userData['email']]);
+
+            if(!empty($user) && password_verify($userData['passwordHash'], $user->getPasswordHash())) {
                 $this->get('session')->set('user', $user);
 
                 if ($this->get('session')->get('purchaseTicketRedirectUrl')) {

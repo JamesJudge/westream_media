@@ -136,8 +136,10 @@ function showUser(data){
     $("#view-email").html(data['email']);
     $("#form-email").val(data['email']);
 
-    $("#view-password-hash").html(data['passwordHash']);
-    $("#form-password-hash").val(data['passwordHash']);
+    //$("#view-password-hash").html(data['passwordHash']);
+    //$("#form-password-hash").val(data['passwordHash']);
+    $("#view-password-hash").html('********');
+    $("#form-password-hash").val('');
 
     // TODO: Actually hash passwords...
     $("#view-nickname").html(data['nickname']);
@@ -197,7 +199,7 @@ function editUserCancel(){
 
 function gotUser(data, userFormName){
     var formPredecessor = (userFormName == 'editUserForm') ? 'form' : 'frm';
-    
+    /*
     document.forms[userFormName].reset();
 
     $("#" + formPredecessor + "-id").val(data['id']);
@@ -223,7 +225,7 @@ function gotUser(data, userFormName){
     }
 
     $('#modal-user-form').modal();
-
+    */
     dataTable.destroy();
     getUsers();
 }
