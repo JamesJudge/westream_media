@@ -8,7 +8,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Show;
+use App\Entity\Shows;
 use App\Entity\Order;
 
 use mysql_xdevapi\Exception;
@@ -263,14 +263,15 @@ class UserController extends AbstractController
         }
 
         //  venues (shows)
-        $showRepo = $this->getDoctrine()->getRepository(Show::class);
-        $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
-        if (!empty($currentUser) && count($shows)) {
-            foreach ($shows as $show) {
-                $showOrders = $show->getOrders();
-                foreach ($showOrders as $showOrder) {
-                    if ($showOrder->getUser()->getId() == $currentUser->getId()) {
-                        $show->setOrdered(true);
+        $showsRepo = $this->getDoctrine()->getRepository(Shows::class);
+        $showsData = $showsRepo->findBy(['user' => $user], ['start' => 'DESC']);
+        //echo "<pre>"; print_r($showsData);exit;
+        if (!empty($currentUser) && count($showsData)) {
+            foreach ($showsData as $shows) {
+                $showsOrders = $shows->getOrders();
+                foreach ($showsOrders as $showsOrder) {
+                    if ($showsOrder->getUser()->getId() == $currentUser->getId()) {
+                        $shows->setOrdered(true);
                     }
                 }
             }
@@ -282,7 +283,7 @@ class UserController extends AbstractController
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
-            'shows' => $shows,
+            'showsData' => $showsData,
             'orders' => $orders,
             'nickname' =>$nickname,
             'currentUser' =>$currentUser,

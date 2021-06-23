@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Order;
-use App\Entity\Show;
+use App\Entity\Shows;
 
 use ContainerIozxIel\getJmsSerializerService;
 
@@ -77,25 +77,25 @@ class ApiController extends AbstractController
     }
 
     /**
-     * * @Route(path="/api/order/post/{showId}", methods={"POST"})
+     * * @Route(path="/api/order/post/{showsId}", methods={"POST"})
      * @param $request
      * @return mixed
      */
-    public function orderPost($showId, Request $request)
+    public function orderPost($showsId, Request $request)
     {
         $currentUser = $this->getCurrentUser();
 
         $userRepo = $this->getDoctrine()->getRepository(User::class);
         $user = $userRepo->find($currentUser->getId());
 
-        $showRepo = $this->getDoctrine()->getRepository(Show::class);
-        $show = $showRepo->find($showId);
+        $showsRepo = $this->getDoctrine()->getRepository(Shows::class);
+        $shows = $showsRepo->find($showsId);
 
         $data = $request->request->all();
 
         $order = new Order();
         $order->setUser($user);
-        $order->setShow($show);
+        $order->setShows($shows);
         $order->setAmount($data['amount']);
         $order->setPaymentDate(new \DateTime($data['update_time']));
         $order->setPaymentStatus($data['status']);
@@ -114,9 +114,9 @@ class ApiController extends AbstractController
      * * @Route(path="/api/shows", methods={"GET"})
      * @return mixed
      */
-    public function showList()
+    public function showsList()
     {
-        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $repository = $this->getDoctrine()->getRepository(Shows::class);
         $shows = $repository->findAll();
 
         $response = $this->getResponse($shows);
@@ -124,66 +124,66 @@ class ApiController extends AbstractController
     }
 
     /**
-     * * @Route(path="/api/show/{id}", methods={"GET"})
+     * * @Route(path="/api/shows/{id}", methods={"GET"})
      * @return mixed
      */
-    public function showView($id)
+    public function showsView($id)
     {
-        $repository = $this->getDoctrine()->getRepository(Show::class);
-        $show = $repository->findBy(['id' => $id]);
+        $repository = $this->getDoctrine()->getRepository(Shows::class);
+        $shows = $repository->findBy(['id' => $id]);
 
-        $response = $this->getResponse($show);
+        $response = $this->getResponse($shows);
         return $response;
     }
 
     /**
-     * * @Route(path="/api/show", methods={"POST"})
+     * * @Route(path="/api/shows", methods={"POST"})
      * @param $request
      * @return mixed
      */
-    public function showPost(Request $request)
+    public function showsPost(Request $request)
     {
         $userRepo = $this->getDoctrine()->getRepository(User::class);
         $user = $userRepo->findOneBy(['id' => $request->get('user')]);
 
-        $show = new Show();
-        $show->setEventName($request->get('event_name'));
-        $show->setRecordedLink($request->get('recorded_link'));
-        $show->setStart(new \DateTime($request->get('start')));
-        $show->setEnd(new \DateTime($request->get('end')));
-        $show->setAmount($request->get('amount'));
-        $show->setUser($user);
+        $shows = new Shows();
+        $shows->setEventName($request->get('event_name'));
+        $shows->setRecordedLink($request->get('recorded_link'));
+        $shows->setStart(new \DateTime($request->get('start')));
+        $shows->setEnd(new \DateTime($request->get('end')));
+        $shows->setAmount($request->get('amount'));
+        $shows->setUser($user);
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($show);
+        $entityManager->persist($shows);
         $entityManager->flush();
 
-        $response = $this->getResponse($show, Response::HTTP_CREATED);
+        $response = $this->getResponse($shows, Response::HTTP_CREATED);
         return $response;
     }
 
     /**
-     * * @Route(path="/api/show/{id}", methods={"PUT"})
+     * * @Route(path="/api/shows/{id}", methods={"PUT"})
      * @param $request
      * @return mixed
      */
-    public function showPut(Request $request)
+    public function showsPut(Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository(Show::class);
+        $repository = $this->getDoctrine()->getRepository(Shows::class);
         $id = $request->get('id');
 
-        $show = $repository->findOneBy(['id'=>$id]);
-        $show->setEventName($request->get('event_name'));
-        $show->setRecordedLink($request->get('recorded_link'));
-        $show->setStart(new \DateTime($request->get('start')));
-        $show->setEnd(new \DateTime($request->get('end')));
-        $show->setAmount($request->get('amount'));
+        $shows = $repository->findOneBy(['id'=>$id]);
+        $shows->setEventName($request->get('event_name'));
+        $shows->setRecordedLink($request->get('recorded_link'));
+        $shows->setStart(new \DateTime($request->get('start')));
+        $shows->setEnd(new \DateTime($request->get('end')));
+        $shows->setAmount($request->get('amount'));
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($show);
+        $entityManager->persist($shows);
         $entityManager->flush();
 
-        $response = $this->getResponse($show);
+        $response = $this->getResponse($shows);
         return $response;
     }
 

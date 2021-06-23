@@ -43,12 +43,12 @@ class AdminController extends AbstractController
     }
 
     /**
-     * * @Route(path="/admin/show/list", methods={"GET"})
+     * * @Route(path="/admin/shows/list", methods={"GET"})
      * @return mixed
      */
-    public function showList()
+    public function showsList()
     {
-        return $this->render('admin/showList.html.twig', [
+        return $this->render('admin/showsList.html.twig', [
             'section' => 'Show List'
         ]);
     }

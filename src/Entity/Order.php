@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Shows;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -65,10 +66,10 @@ class Order
 
     /**
      * @Groups("order")
-     * @ORM\ManyToOne(targetEntity=Show::class, inversedBy="orders")
-     * @ORM\JoinColumn(name="show_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Shows::class, inversedBy="orders")
+     * @ORM\JoinColumn(name="shows_id", referencedColumnName="id", nullable=false)
      */
-    private $show;
+    private $shows;
 
     public function getId(): ?int
     {
@@ -147,14 +148,14 @@ class Order
         return $this;
     }
 
-    public function getShow(): ?Show
+    public function getShows(): ?Shows
     {
-        return $this->show;
+        return $this->shows;
     }
 
-    public function setShow(?Show $show): self
+    public function setShows(?Shows $shows): self
     {
-        $this->show = $show;
+        $this->shows = $shows;
 
         return $this;
     }

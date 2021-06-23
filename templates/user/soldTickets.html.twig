@@ -2,15 +2,15 @@
 <div>&nbsp;</div>
 <div style="text-align: center;"><h4>Sold Tickets</h4></div>
 <div>&nbsp;</div>
-{% if shows %}
+{% if showsData %}
     <table class="table my-table">
         <tbody>
-            {% for show in shows %}
+            {% for shows in showsData %}
                 <tr style="background:#ffe400;">
-                    <td colspan="4"><h4 style="color:black;">{{ show.eventName }}</h4></td>
+                    <td colspan="4"><h4 style="color:black;">{{ shows.eventName }}</h4></td>
                 </tr>
 
-                {% set orders = show.orders %}
+                {% set orders = shows.orders %}
 
                 {% if orders.count > 0 %}
                     <tr>
@@ -29,8 +29,8 @@
                     {% set user = order.user %}
                     <tr>
                         <td>{{ user.nickName }}</td>
-                        <td>{{ show.start|date("Y-m-d H:i") }}</td>
-                        <td>{{ show.end|date("Y-m-d H:i") }}</td>
+                        <td>{{ shows.start|date("Y-m-d H:i") }}</td>
+                        <td>{{ shows.end|date("Y-m-d H:i") }}</td>
                         <td>${{ order.amount }}</td>
                     </tr>
                 {% endfor %}

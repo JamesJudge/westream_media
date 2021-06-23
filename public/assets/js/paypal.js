@@ -2,7 +2,7 @@ var FUNDING_SOURCES = [
     paypal.FUNDING.PAYPAL
 ];
 
-function purchaseTicket(venueName, showId, amount, showEndTime) {
+function purchaseTicket(venueName, showsId, amount, showsEndTime) {
 
 	$.when(isUserLoggedIn(venueName)).then(function(data, textStatus, jqXHR) {
 
@@ -13,15 +13,15 @@ function purchaseTicket(venueName, showId, amount, showEndTime) {
 
 			} else {
 		
-				if (data.currentTimestamp > showEndTime) {
+				if (data.currentTimestamp > showsEndTime) {
 					window.location.reload();
 				}
 
-		        $('#purchaseTicket' + showId).addClass('hide');
-		        $('#cancelTicket' + showId).removeClass('hide');
+		        $('#purchaseTicket' + showsId).addClass('hide');
+		        $('#cancelTicket' + showsId).removeClass('hide');
 
 		        $('.paypal-button-container').attr('id', '');
-		        $('#ordered_' + showId + ' .paypal-button-container').attr('id', 'paypal-button');
+		        $('#ordered_' + showsId + ' .paypal-button-container').attr('id', 'paypal-button');
 		        $('#paypal-button').html('');
 
 				// Loop over each funding source / payment method
@@ -82,7 +82,7 @@ function purchaseTicket(venueName, showId, amount, showEndTime) {
 			                		'intent': details.intent
 			                	};
 
-			                	createNewOrder(showId, orderDetails);
+			                	createNewOrder(showsId, orderDetails);
 
 			                    // This function shows a transaction success message to your buyer.
 			                    alert('Transaction completed by ' + details.payer.name.given_name);
@@ -113,9 +113,9 @@ function purchaseTicket(venueName, showId, amount, showEndTime) {
 	});
 }
 
-function cancelTicket(showId) {
-    $('#cancelTicket' + showId).addClass('hide');
-    $('#purchaseTicket' + showId).removeClass('hide');
+function cancelTicket(showsId) {
+    $('#cancelTicket' + showsId).addClass('hide');
+    $('#purchaseTicket' + showsId).removeClass('hide');
 
     $('#paypal-button').html('');
     $('.paypal-button-container').attr('id', '');
@@ -129,9 +129,9 @@ function isUserLoggedIn(venueName) {
     });
 }
 
-function createNewOrder(showId, data) {
+function createNewOrder(showsId, data) {
 	return $.ajax({
-		url: '/api/order/post/' + showId,
+		url: '/api/order/post/' + showsId,
         type: 'POST',
         data: data
     });

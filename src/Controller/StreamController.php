@@ -8,7 +8,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Show;
+use App\Entity\Shows;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,20 +65,20 @@ class StreamController extends AbstractController
                 //  venues (shows)
                 $userShows = [];
                 $ticksetPurchased = 0;
-                $showEvent = false;
+                $showsEvent = false;
                 $currentTimeStamp = time();
-                $showRepo = $this->getDoctrine()->getRepository(Show::class);
-                $shows = $showRepo->findBy(['user' => $user], ['start' => 'DESC']);
+                $showsRepo = $this->getDoctrine()->getRepository(Shows::class);
+                $showsData = $showsRepo->findBy(['user' => $user], ['start' => 'DESC']);
 
-                if (count($shows)) {
-                    foreach ($shows as $show) {
-                        $showOrders = $show->getOrders();
-                        foreach ($showOrders as $showOrder) {
-                            if ($showOrder->getUser()->getId() == $currentUser->getId()) {
+                if (count($showsData)) {
+                    foreach ($showsData as $shows) {
+                        $showsOrders = $shows->getOrders();
+                        foreach ($showsOrders as $showsOrder) {
+                            if ($showsOrder->getUser()->getId() == $currentUser->getId()) {
                                 $ticksetPurchased++;
 
-                                if ($show->getStart()->getTimeStamp() <= $currentTimeStamp && $currentTimeStamp <= $show->getEnd()->getTimeStamp()) {
-                                    $showEvent = true;
+                                if ($shows->getStart()->getTimeStamp() <= $currentTimeStamp && $currentTimeStamp <= $shows->getEnd()->getTimeStamp()) {
+                                    $showsEvent = true;
                                 }
                             }
                         }
@@ -92,7 +92,7 @@ class StreamController extends AbstractController
                     'streamer' => $venueName,
                     'nickname' => $nickname,
                     'section' => 'live',
-                    'showEvent' => $showEvent,
+                    'showsEvent' => $showsEvent,
                     'ticksetPurchased' => $ticksetPurchased,
                     'currentUser' => $currentUser,
                 ]);

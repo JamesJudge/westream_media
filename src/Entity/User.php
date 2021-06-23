@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Show;
+use App\Entity\Shows;
 use App\Repository\UserRepository;
 
 use Doctrine\Common\Collections\Collection;
@@ -87,7 +87,7 @@ class User
     private $userType;
 
     /**
-     * @ORM\OneToMany(targetEntity=Show::class, mappedBy="user", cascade="remove")
+     * @ORM\OneToMany(targetEntity=Shows::class, mappedBy="user", cascade="remove")
      **/
     private $shows;
 
@@ -255,19 +255,19 @@ class User
         return $this->shows;
     }
 
-    public function hasShow(Show $show)
+    public function hasShows(Shows $shows)
     {
-        return $this->shows->contains($show);
+        return $this->shows->contains($shows);
     }
 
-    public function addShow(Show $show)
+    public function addShows(Shows $shows)
     {
-        $this->shows->add($show);
+        $this->shows->add($shows);
     }
 
-    public function removeShow(Show $show)
+    public function removeShows(Shows $shows)
     {
-        $this->shows->removeElement($show);
+        $this->shows->removeElement($shows);
     }
 
     /**
