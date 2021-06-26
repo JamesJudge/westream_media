@@ -201,15 +201,36 @@ class ApiController extends AbstractController
     }
 
     /**
+     * * @Route(path="/api/users/update/pass", methods={"GET"})
+     * @return mixed
+     */
+    public function updatePass()
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach ($users as $user) {
+            $user->setPasswordHash(password_hash($user->getPasswordHash(), PASSWORD_DEFAULT));
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        $response = $this->getResponse($users);
+        return $response;
+    }
+
+    /**
      * * @Route(path="/api/users", methods={"GET"})
      * @return mixed
      */
     public function userList()
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $companies = $repository->findAll();
+        $users = $repository->findAll();
 
-        $response = $this->getResponse($companies);
+        $response = $this->getResponse($users);
         return $response;
     }
 
@@ -269,7 +290,7 @@ class ApiController extends AbstractController
         }
 
         if ($request->get('passwordHash')) {
-            $user->setPasswordHash($request->get('passwordHash'));
+            $user->setPasswordHash(password_hash($request->get('passwordHash'), PASSWORD_DEFAULT));
         }
 
         $user->setStreamingKey($request->get('streamingKey'));
