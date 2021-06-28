@@ -8,6 +8,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserType;
 use App\Entity\Shows;
 use App\Entity\Order;
 
@@ -20,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-use App\Form\Type\UserType;
+use App\Form\Type\UserType as UserTypeForm;
 use Symfony\Component\Validator\Constraints\File;
 
 class UserController extends AbstractController
@@ -128,7 +129,7 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
             ->add('email', TextType::class, ['label' => 'Email Address'])
-            ->add('passwordHash', PasswordType::class, ['label' => 'Password'])
+            ->add('password', PasswordType::class, ['label' => 'Password'])
             ->add('nickname', TextType::class, ['label' => 'Display Name'])
             ->add('firstName', TextType::class, ['label' => 'First Name'])
             ->add('lastName', TextType::class, ['label' => 'Last Name'])
@@ -156,11 +157,13 @@ class UserController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
 
                 $user->setEmail($userData['email']);
-                $user->setPasswordHash(password_hash($userData['passwordHash'], PASSWORD_DEFAULT));
+                $user->setPassword(password_hash($userData['password'], PASSWORD_DEFAULT));
                 $user->setNickname($userData['nickname']);
                 $user->setFirstName($userData['firstName']);
                 $user->setLastName($userData['lastName']);
-                $user->setUserType('viewer');
+
+                $userType = $this->getDoctrine()->getRepository(UserType::class)->findOneBy(['type' => 'viewer']);
+                $user->addUserType($userType);
 
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -199,7 +202,7 @@ class UserController extends AbstractController
 
         $form = $this->createFormBuilder(null, ['csrf_protection' => false])
             ->add('email', TextType::class, ['label' => 'Email Address'])
-            ->add('passwordHash', PasswordType::class, ['label' => 'Password'])
+            ->add('password', PasswordType::class, ['label' => 'Password'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -209,7 +212,7 @@ class UserController extends AbstractController
             $repository = $this->getDoctrine()->getRepository(User::class);
             $user = $repository->findOneBy(['email' => $userData['email']]);
 
-            if(!empty($user) && password_verify($userData['passwordHash'], $user->getPasswordHash())) {
+            if(!empty($user) && password_verify($userData['password'], $user->getPassword())) {
                 $this->get('session')->set('user', $user);
 
                 if ($this->get('session')->get('purchaseTicketRedirectUrl')) {
@@ -309,7 +312,7 @@ class UserController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['id' => $userId]);
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserTypeForm::class, $user);
         $form->handleRequest($request);
 
         $validateFields = array('email' => '', 'nickname' => '', 'firstName' => '', 'lastName' => '', 'profileImage' => '');

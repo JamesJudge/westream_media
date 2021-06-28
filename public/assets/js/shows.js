@@ -26,7 +26,7 @@ function gotShows(showsData) {
     table.empty();
 
     if(showsData.length < 1) {
-        table.html('<tr><td colspan="5">No records found</td></tr>');
+        table.html('<tr><td colspan="6" align="center">No records found</td></tr>');
         return false;
     }
 

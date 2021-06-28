@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Entity\Shows;
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,26 +17,32 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  */
-class User
+class User implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, unique=true)
      * @Assert\NotBlank
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      * @Assert\NotBlank
      */
-    private $passwordHash;
+    private $password;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -51,7 +57,8 @@ class User
     private $lastName;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\NotBlank
      */
     private $nickname;
 
@@ -81,12 +88,6 @@ class User
     private $streamingServer;
 
     /**
-     * @ORM\Column(type="string", name="user_type", length=20)
-     * @SerializedName("userType")
-     */
-    private $userType;
-
-    /**
      * @ORM\OneToMany(targetEntity=Shows::class, mappedBy="user", cascade="remove")
      **/
     private $shows;
@@ -95,6 +96,18 @@ class User
      * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user", cascade="remove")
      */
     private $orders;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=UserType::class, inversedBy="user")
+     * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
+     */
+    private $userType;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @SerializedName("isAdmin")
+     */
+    private $isAdmin;
 
     public function __construct()
     {
@@ -119,17 +132,68 @@ class User
         return $this;
     }
 
-    public function getPasswordHash(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        return $this->passwordHash;
+        return (string) $this->email;
     }
 
-    public function setPasswordHash(string $passwordHash): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
-        $this->passwordHash = $passwordHash;
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getFirstName(): ?string
@@ -238,12 +302,12 @@ class User
         return $this;
     }
 
-    public function getUserType(): ?string
+    public function getUserType()
     {
         return $this->userType;
     }
 
-    public function setUserType(?string $userType): self
+    public function addUserType(UserType $userType)
     {
         $this->userType = $userType;
 
@@ -300,4 +364,15 @@ class User
         return $this;
     }
 
+    public function isAdmin(): ?bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(?bool $isAdmin): self
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
 }

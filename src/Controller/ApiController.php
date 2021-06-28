@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserType;
 use App\Entity\Order;
 use App\Entity\Shows;
 
@@ -21,12 +22,21 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 /**
  * Class ApiController
  * @package App\Controller
  */
 class ApiController extends AbstractController
 {
+    public $session;
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     private function getCurrentUser()
     {
         $currentUser = $this->get('session')->get('user');
@@ -116,8 +126,15 @@ class ApiController extends AbstractController
      */
     public function showsList()
     {
-        $repository = $this->getDoctrine()->getRepository(Shows::class);
-        $shows = $repository->findAll();
+        if ($this->session->get('adminLogin') && $this->session->get('userType') == 'venue') {
+            $repository = $this->getDoctrine()->getRepository(User::class);
+            $currentUser = $repository->find($this->session->get('userId'));
+
+            $shows = $currentUser->getShows();
+        } else {
+            $repository = $this->getDoctrine()->getRepository(Shows::class);
+            $shows = $repository->findAll();
+        }
 
         $response = $this->getResponse($shows);
         return $response;
@@ -211,7 +228,7 @@ class ApiController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         foreach ($users as $user) {
-            $user->setPasswordHash(password_hash($user->getPasswordHash(), PASSWORD_DEFAULT));
+            $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -228,7 +245,14 @@ class ApiController extends AbstractController
     public function userList()
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
-        $users = $repository->findAll();
+
+        if ($this->session->get('adminLogin') && $this->session->get('userType') == 'venue') {
+            $currentUser = $repository->find($this->session->get('userId'));
+            $users = $repository->fetchVenueUser($currentUser);
+            //$users = $repository->findAll();
+        } else {
+            $users = $repository->findAll();
+        }
 
         $response = $this->getResponse($users);
         return $response;
@@ -283,14 +307,17 @@ class ApiController extends AbstractController
         $user->setNickname($request->get('nickname'));
         $user->setFirstName($request->get('firstName'));
         $user->setLastName($request->get('lastName'));
-        $user->setUserType($request->get('userType'));
+        $user->setIsAdmin($request->get('isAdmin'));
+
+        $userType = $this->getDoctrine()->getRepository(UserType::class)->findOneBy(['type' => $request->get('userType')]);
+        $user->addUserType($userType);
 
         if ($request->get('profileImage')) {
             $user->setProfileImage($request->get('profileImage'));
         }
 
-        if ($request->get('passwordHash')) {
-            $user->setPasswordHash(password_hash($request->get('passwordHash'), PASSWORD_DEFAULT));
+        if (trim($request->get('password'))) {
+            $user->setPassword(password_hash(trim($request->get('password')), PASSWORD_DEFAULT));
         }
 
         $user->setStreamingKey($request->get('streamingKey'));
@@ -474,6 +501,82 @@ class ApiController extends AbstractController
         }
 
         $response = $this->getResponse($user, false);
+        return $response;
+    }
+
+
+    /**
+     * @Route(path="/api/userTypes", methods={"GET"})
+     * @return mixed
+     */
+    public function userTypesList()
+    {
+        if (!$this->session->get('adminLogin')) {
+            return;
+        }
+
+        if ($this->session->get('userType') != 'admin') {
+            return;
+        } else {
+            $repository = $this->getDoctrine()->getRepository(UserType::class);
+            $userTypes = $repository->findAll();
+        }
+
+        $response = $this->getResponse($userTypes);
+        return $response;
+    }
+
+    /**
+     * @Route(path="/api/userType/{id}", methods={"GET"})
+     * @return mixed
+     */
+    public function userTypeView($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(UserType::class);
+        $userType = $repository->findBy(['id' => $id]);
+
+        $response = $this->getResponse($userType);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/userType", methods={"POST"})
+     * @param $request
+     * @return mixed
+     */
+    public function userTypePost(Request $request)
+    {
+        $userType = new UserType();
+        $userType->setType($request->get('type'));
+        $userType->setName($request->get('name'));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($userType);
+        $entityManager->flush();
+
+        $response = $this->getResponse($userType, Response::HTTP_CREATED);
+        return $response;
+    }
+
+    /**
+     * * @Route(path="/api/userType/{id}", methods={"PUT"})
+     * @param $request
+     * @return mixed
+     */
+    public function userTypePut(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(UserType::class);
+        $id = $request->get('id');
+
+        $userType = $repository->findOneBy(['id'=>$id]);
+        $userType->setType($request->get('type'));
+        $userType->setName($request->get('name'));
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($userType);
+        $entityManager->flush();
+
+        $response = $this->getResponse($userType);
         return $response;
     }
 
