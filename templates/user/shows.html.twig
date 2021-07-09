@@ -2,7 +2,7 @@
 <div>&nbsp;</div>
 <div style="text-align: center;"><h4>Shows/Events</h4></div>
 <div>&nbsp;</div>
-{% if shows %}
+{% if showsData %}
     <table class="table my-table">
         <thead>
             <tr>
@@ -15,26 +15,26 @@
             </tr>
         </thead>
         <tbody>
-            {% for show in shows %}
+            {% for shows in showsData %}
                 <tr>
-                    <td>{{ show.eventName }}</td>
-                    <td>{{ show.start|date("Y-m-d H:i") }}</td>
-                    <td>{{ show.end|date("Y-m-d H:i") }}</td>
-                    <td>${{ show.amount }}</td>
+                    <td>{{ shows.eventName }}</td>
+                    <td>{{ shows.start|date("Y-m-d H:i") }}</td>
+                    <td>{{ shows.end|date("Y-m-d H:i") }}</td>
+                    <td>${{ shows.amount }}</td>
                     <td>
-                        {% if show.isOrdered %}
-                            {% if (isUserLoggedIn and currentTimestamp > show.end|date("U")) %}
+                        {% if shows.isOrdered %}
+                            {% if (isUserLoggedIn and currentTimestamp > shows.end|date("U")) %}
                                 Completed
                             {% else %}
                                 <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
                             {% endif %}
                         {% else %}
-                            {% if (isUserLoggedIn and currentTimestamp > show.end|date("U")) %}
+                            {% if (isUserLoggedIn and currentTimestamp > shows.end|date("U")) %}
                                 Missed
-                            {% elseif (isUserLoggedIn and currentTimestamp < show.start|date("U")) %}
+                            {% elseif (isUserLoggedIn and currentTimestamp < shows.start|date("U")) %}
                                 Watch stream
                             {% else %}
-                                {% if not isUserLoggedIn and currentTimestamp > show.end|date("U") %}
+                                {% if not isUserLoggedIn and currentTimestamp > shows.end|date("U") %}
                                     Missed
                                 {% else %}
                                     <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
@@ -42,21 +42,21 @@
                             {% endif %}
                         {% endif %}
                     </td>
-                    <td id="ordered_{{show.id}}" >
-                        {% if isUserLoggedIn and show.isOrdered %}
-                            {{ (isUserLoggedIn and currentTimestamp > show.end|date("U")) ? 'Ordered' : 'Ordered' }}
-                        {% elseif isUserLoggedIn and currentTimestamp > show.end|date("U") %}
+                    <td id="ordered_{{shows.id}}" >
+                        {% if isUserLoggedIn and shows.isOrdered %}
+                            {{ (isUserLoggedIn and currentTimestamp > shows.end|date("U")) ? 'Ordered' : 'Ordered' }}
+                        {% elseif isUserLoggedIn and currentTimestamp > shows.end|date("U") %}
                             -
                         {% else %}
                             <div class="paypal-button-container"></div>
                             
-                            {% if (currentTimestamp > show.end|date("U")) %} 
+                            {% if (currentTimestamp > shows.end|date("U")) %} 
                                 {{ '-' }}
                             {% else %}
-                                <a id="purchaseTicket{{show.id}}" href="javascript:void(0);" onclick="purchaseTicket('{{nickname}}', {{show.id}}, {{show.amount}}, {{show.end|date("U")}})">Purchase Ticket</a>
+                                <a id="purchaseTicket{{shows.id}}" href="javascript:void(0);" onclick="purchaseTicket('{{nickname}}', {{shows.id}}, {{shows.amount}}, {{shows.end|date("U")}})">Purchase Ticket</a>
                             {% endif %}
 
-                            <a id="cancelTicket{{show.id}}" class="hide" href="javascript:void(0);" onclick="cancelTicket({{show.id}})">Cancel</a>
+                            <a id="cancelTicket{{shows.id}}" class="hide" href="javascript:void(0);" onclick="cancelTicket({{shows.id}})">Cancel</a>
                         {% endif %}
                     </td>
                 </tr>

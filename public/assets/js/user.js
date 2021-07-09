@@ -1,4 +1,5 @@
-var dataTable;
+var dataTable, userType;
+userType = $('#userType').val();
 
 function getUsers(){
     $.get("/api/users", function(data, status){
@@ -73,10 +74,16 @@ function gotUsers(userData) {
         }
         row.append(cell);
 
-        cell = $("<td />");
-        var userType = (data.userType) ? data.userType : ((data.streamingKey) ? 'venue' : 'viewer');
-        cell.html("<a href='#' onclick=\"viewUser('" + data.id + "')\">" + ucFirst(userType) +"</a>");
-        row.append(cell);
+        if (userType != 'venue') {
+            cell = $("<td />");
+            var dataUserType = (data.userType) ? data.userType.name : ((data.streamingKey) ? 'Venue' : 'Viewer');
+            cell.html("<a href='#' onclick=\"viewUser('" + data.id + "')\">" + dataUserType +"</a>");
+            row.append(cell);
+
+            cell = $("<td />");
+            cell.html("<a href='#' onclick=\"viewUser('" + data.id + "')\">" + (data.admin ? 'Yes' : 'No') +"</a>");
+            row.append(cell);
+        }
 
         table.append(row);
     });
@@ -86,6 +93,7 @@ function gotUsers(userData) {
         "autoWidth": false,
     });
 };
+
 getUsers();
 
 function addUser() {
@@ -136,10 +144,8 @@ function showUser(data){
     $("#view-email").html(data['email']);
     $("#form-email").val(data['email']);
 
-    //$("#view-password-hash").html(data['passwordHash']);
-    //$("#form-password-hash").val(data['passwordHash']);
-    $("#view-password-hash").html('********');
-    $("#form-password-hash").val('');
+    $("#view-password").html('********');
+    $("#form-password").val('');
 
     // TODO: Actually hash passwords...
     $("#view-nickname").html(data['nickname']);
@@ -173,14 +179,18 @@ function showUser(data){
     $("#view-bio").html(data['bio']);
     $("#form-bio").val(data['bio']);
 
-    var viewUserType, formUserType;
-    viewUserType = (data.userType) ? data.userType : ((data.streamingKey) ? 'venue' : 'viewer');
-    viewUserType = ucFirst(viewUserType);
-    formUserType = (data.userType) ? data.userType : ((data.streamingKey) ? 'venue' : 'viewer');
-    $("#view-user-type").html(viewUserType);
-    $("#form-user-type").val(formUserType);
+    $("#view-is-admin").html(data['admin'] ? 'Yes' : 'No');
+    $("#form-is-admin").attr('checked', data['admin'] ? true : false);
 
-    document.getElementById('view-title').innerHTML = 'View User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    var viewUserType, viewUserTypeName, formUserType;
+    viewUserType = (data.userType) ? data.userType.name : ((data.streamingKey) ? 'Venue' : 'Viewer');
+    formUserType = (data.userType) ? data.userType.name : ((data.streamingKey) ? 'Venue' : 'Viewer');
+    $("#view-user-type").html(viewUserType);
+    $('#form-user-type option')
+        .filter(function() { return $.trim( $(this).text() ) == formUserType; })
+        .attr('selected','selected');
+
+    document.getElementById('view-title').innerHTML = ((userType != 'venue') ? 'View User - ' : 'Viewer - ') + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     document.getElementById('form-title').innerHTML = 'Edit User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
     if(data['streamingKey'] != null){
@@ -199,33 +209,7 @@ function editUserCancel(){
 
 function gotUser(data, userFormName){
     var formPredecessor = (userFormName == 'editUserForm') ? 'form' : 'frm';
-    /*
-    document.forms[userFormName].reset();
 
-    $("#" + formPredecessor + "-id").val(data['id']);
-    $("#" + formPredecessor + "-email").val(data['email']);
-    $("#" + formPredecessor + "-password-hash").val(data['passwordHash']);
-    $("#" + formPredecessor + "-nickname").val(data['nickname']);
-    $("#" + formPredecessor + "-first-name").val(data['firstName']);
-    $("#" + formPredecessor + "-last-name").val(data['lastName']);
-    $("#" + formPredecessor + "-streaming-key").val(data['streamingKey']);
-    $("#" + formPredecessor + "-profile-image").val(data['profileImage']);
-    $("#" + formPredecessor + "-category").val(data['category']);
-    $("#" + formPredecessor + "-bio").val(data['bio']);
-    $("#" + formPredecessor + "-user-type").val(data['userType']);
-
-    document.getElementById('form-title').innerHTML = 'Edit User - ' + data['nickname'] + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-
-    if(data['streamingKey'] != null) {
-        $('#btnAddStream').hide();
-        $('#btnRemoveStream').show();
-    } else {
-        $('#btnAddStream').show();
-        $('#btnRemoveStream').hide();
-    }
-
-    $('#modal-user-form').modal();
-    */
     dataTable.destroy();
     getUsers();
 }
@@ -249,7 +233,7 @@ $("#addUserForm, #editUserForm").on("submit", function(e) {
 
     userData = {
         email: $("#" + formPredecessor + "-email").val(),
-        passwordHash: $("#" + formPredecessor + "-password-hash").val(),
+        password: $("#" + formPredecessor + "-password").val(),
         nickname: $("#" + formPredecessor + "-nickname").val(),
         firstName: $("#" + formPredecessor + "-first-name").val(),
         lastName: $("#" + formPredecessor + "-last-name").val(),
@@ -259,6 +243,7 @@ $("#addUserForm, #editUserForm").on("submit", function(e) {
         category: $("#" + formPredecessor + "-category").val(),
         bio: $("#" + formPredecessor + "-bio").val(),
         userType: $("#" + formPredecessor + "-user-type").val(),
+        isAdmin: $("#" + formPredecessor + "-is-admin").val(),
     };
 
     skipFields = ['passwordHash', 'streamingKey', 'streamingServer', 'profileImage', 'category', 'bio'];

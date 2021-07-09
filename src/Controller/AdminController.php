@@ -7,9 +7,13 @@
  */
 namespace App\Controller;
 
+use App\Entity\UserType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class AdminController
@@ -31,25 +35,52 @@ class AdminController extends AbstractController
 
 
     /**
-     * * @Route(path="/admin/user/list", methods={"GET"})
+     * @Route(path="/admin/user/list", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      * @return mixed
      */
-    public function userList()
+    public function userList(Request $request)
     {
+        $user = $this->getUser();
+        $session = $request->getSession();
+
+        $repository = $this->getDoctrine()->getRepository(UserType::class);
+        $userTypes = $repository->findAll();
+
         return $this->render('admin/userList.html.twig', [
-            'section' => 'User List',
+            'section' => $session->get('userType') != 'venue' ? 'Users' : 'Viewers',
+            'nickname' => $user->getNickname(),
+            'userTypes' => $userTypes,
+            'userType' => $session->get('userType')
             //'currentUser' => $this->getCurrentUser(),
         ]);
     }
 
     /**
-     * * @Route(path="/admin/show/list", methods={"GET"})
+     * @Route(path="/admin/shows/list", methods={"GET"})
      * @return mixed
      */
-    public function showList()
+    public function showsList(Request $request)
     {
-        return $this->render('admin/showList.html.twig', [
-            'section' => 'Show List'
+        $session = $request->getSession();
+
+        return $this->render('admin/showsList.html.twig', [
+            'section' => 'Shows',
+            'userType' => $session->get('userType')
+        ]);
+    }
+
+    /**
+     * @Route(path="/admin/userType/list", methods={"GET"})
+     * @return mixed
+     */
+    public function userTypeList(Request $request)
+    {
+        $session = $request->getSession();
+
+        return $this->render('admin/userTypeList.html.twig', [
+            'section' => 'User Type',
+            'userType' => $session->get('userType')
         ]);
     }
 

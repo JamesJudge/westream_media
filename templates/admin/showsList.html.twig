@@ -38,19 +38,19 @@
 {% endblock %}
 
 {% block body %}
-    <div class="modal fade" id="modal-show-form">
+    <div class="modal fade" id="modal-shows-form">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="form-title">Add / Edit Show</h4>
-                <button type="button" id="editShowModalClose" class="close" data-dismiss="modal" aria-label="Close">
+                <h4 class="modal-title" id="form-title">Add / Edit Shows</h4>
+                <button type="button" id="editShowsModalClose" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body">
                 <div class="modal-body">
-                    <form id="addShowForm" class="show-form" name="showForm" method="post">
+                    <form id="addShowsForm" class="shows-form" name="showsForm" method="post">
                         <table border="0">
                             <tr>
                                 <th align="right">Event Name</th>
@@ -100,13 +100,13 @@
                                 <td></td>
                                 <td>
                                     <button name="btnSave" id="btnSave">Save</button>
-                                    <button type="button" name="btnCancel" onclick="editShowCancel()">Cancel</button>
+                                    <button type="button" name="btnCancel" onclick="editShowsCancel()">Cancel</button>
                                 </td>
                             </tr>
                         </table>
                     </form>
 
-                    <form id="editShowForm" class="show-form" name="showForm" method="post">
+                    <form id="editShowsForm" class="shows-form" name="showsForm" method="post">
                         <input type="hidden" name="id" id="form-id" value=""/>
                         <table border="0">
                             <tr>
@@ -156,7 +156,7 @@
                                 <td></td>
                                 <td>
                                     <button name="btnSave" id="btnEdit">Save</button>
-                                    <button type="button" name="btnCancel" onclick="editShowCancel()">Cancel</button>
+                                    <button type="button" name="btnCancel" onclick="editShowsCancel()">Cancel</button>
                                 </td>
                             </tr>
                         </table>
@@ -167,14 +167,14 @@
       </div>
     </div>
 
-    <!-- view show modal window -->
-    <div class="modal fade" id="modal-show-view">
+    <!-- view shows modal window -->
+    <div class="modal fade" id="modal-shows-view">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="view-title">Add / Edit Show - (No show selected)</h4>
+                    <h4 class="modal-title" id="view-title">Add / Edit Shows - (No shows selected)</h4>
 
-                    <button type="button" class="edit" aria-label="Edit" id="btnEditShow" onclick="editClick()">
+                    <button type="button" class="edit" aria-label="Edit" id="btnEditShows" onclick="editClick()">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
                     </button>
 
@@ -222,7 +222,7 @@
         </div>
     </div>
 
-    <!-- END view show modal window -->
+    <!-- END view shows modal window -->
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -233,10 +233,10 @@
 
                     <div class="card-body">
                         <div id="customButtons" style="margin-bottom:10px">
-                            <button name="btnAdd" id="btnAdd" onclick="addShow()">Add New</button>
+                            <button name="btnAdd" id="btnAdd" onclick="addShows()">Add New</button>
                         </div>
                         <div class="succMsg hide"></div>
-                        <table id="showTable" class="table table-bordered table-striped hover">
+                        <table id="showsTable" class="table table-bordered table-striped hover">
                             <thead>
                                 <tr>
                                     <th width="20%">Event Name</th>
@@ -248,7 +248,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="tbody-show" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
+                            <tbody id="tbody-shows" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
                                 <tr>
                                     <td colspan="15">Loading...</td>
                                 </tr>
@@ -284,6 +284,6 @@
 
     <script src="{{ asset('/assets/js/moment.js') }}"></script>
     <script src="{{ asset('/assets/js/bootstrap-datetimepicker.js') }}"></script>
-    <script src="{{ asset('/assets/js/show.js') }}"></script>
+    <script src="{{ asset('/assets/js/shows.js') }}"></script>
 
 {% endblock %}

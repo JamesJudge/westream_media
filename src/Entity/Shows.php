@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\ShowRepository;
+use App\Repository\ShowsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,13 +11,13 @@ use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=ShowRepository::class)
- * @ORM\Table(name="`show`")
+ * @ORM\Entity(repositoryClass=ShowsRepository::class)
+ * @ORM\Table(name="`shows`")
  */
-class Show
+class Shows
 {
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -25,39 +25,39 @@ class Show
     private $id;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Column(type="datetime")
      */
     private $start;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Column(type="datetime")
      */
     private $end;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Column(type="string", name="recorded_link", length=255)
      * @SerializedName("recordedLink")
      */
     private $recordedLink;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Column(type="float", options={"default":0})
      */
     private $amount;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\Column(type="string", name="event_name", length=100)
      * @SerializedName("eventName")
      */
     private $eventName;
 
     /**
-     * @Groups("show")
+     * @Groups("shows")
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      *
@@ -66,8 +66,8 @@ class Show
     private $user;
 
     /**
-     * @Groups("show")
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="show", cascade="remove")
+     * @Groups("shows")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="shows", cascade="remove")
      */
     private $orders;
 
@@ -167,7 +167,7 @@ class Show
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
-            $order->setShowId($this);
+            $order->setShowsId($this);
         }
 
         return $this;
@@ -177,8 +177,8 @@ class Show
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($order->getShowId() === $this) {
-                $order->setShowId(null);
+            if ($order->getShowsId() === $this) {
+                $order->setShowsId(null);
             }
         }
 

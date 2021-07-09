@@ -10,14 +10,18 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
+        {% if is_granted('ROLE_USER') %}
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-            </div>
+            {% if (app.user.profileImage) %}
+                <div class="image">
+                    <img src="/assets/profile/{{app.user.profileImage}}" class="img-circle elevation-2" alt="User Image">
+                </div>
+            {% endif %}
             <div class="info">
-                <a href="#" class="d-block">Admin User</a>
+                <a href="#" class="d-block">{{app.user.nickname}}</a>
             </div>
         </div>
+        {% endif %}
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -34,18 +38,26 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="/admin/user/list" class="nav-link">
+                            <a href="/admin/user/list" class="nav-link {{ (section == 'Users' or section == 'Viewers') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>User Admin</p>
+                                <p>{{ userType == 'venue' ? 'Viewer' : 'Users'}}</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/show/list" class="nav-link">
+                            <a href="/admin/shows/list" class="nav-link {{ section == 'Shows' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Show Admin</p>
+                                <p>Shows</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {% if userType != 'venue' %}
+                            <li class="nav-item">
+                                <a href="/admin/userType/list" class="nav-link {{ section == 'User Type' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>User Type</p>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!--<li class="nav-item">
                             <a href="./index2.html" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dashboard v2</p>
@@ -56,7 +68,7 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dashboard v3</p>
                             </a>
-                        </li>
+                        </li>-->
                     </ul>
                 </li>
                 <li class="nav-item">

@@ -21,19 +21,19 @@ function getShows() {
     });
 }
 
-function gotShows(showData) {
-    var table = $("#tbody-show");
+function gotShows(showsData) {
+    var table = $("#tbody-shows");
     table.empty();
 
-    if(showData.length < 1) {
-        table.innerHTML = '<tr><td colspan="5">No records found</td></tr>';
+    if(showsData.length < 1) {
+        table.html('<tr><td colspan="6" align="center">No records found</td></tr>');
         return false;
     }
 
     //Add the data rows.
     var cell = "";
     var row = "";
-    $.each(showData, function(index, data) {
+    $.each(showsData, function(index, data) {
         // writing out line to debug console
         row = $("<tr id='"+ data.id +"'/>");
 
@@ -64,7 +64,7 @@ function gotShows(showData) {
         table.append(row);
     });
 
-    dataTable = $("#showTable").DataTable({
+    dataTable = $("#showsTable").DataTable({
         "responsive": true,
         "autoWidth": false,
     });
@@ -72,7 +72,7 @@ function gotShows(showData) {
 
 getShows();
 
-function addShow() {
+function addShows() {
     $.when(getUserList('venue')).then(function(userData, textStatus, jqXHR) {
         if (userData.length) {
             var selTag = $('<select>').attr({'id': 'frm-user', 'required': true, 'class': 'selectTag'});
@@ -84,23 +84,23 @@ function addShow() {
             $('#formUserList').html(selTag);
         }
 
-        document.forms['showForm'].reset();
-        document.getElementById('form-title').innerHTML = 'Add Show';
+        document.forms['showsForm'].reset();
+        document.getElementById('form-title').innerHTML = 'Add Shows';
 
         $('.succMsg').addClass('hide');
-        $('#addShowForm').removeClass('hide');
-        $('#editShowForm').addClass('hide');
+        $('#addShowsForm').removeClass('hide');
+        $('#editShowsForm').addClass('hide');
 
-        $('#modal-show-form').modal();
+        $('#modal-shows-form').modal();
     });
 }
 
-$("#addShowForm").on("submit", function(e) {
+$("#addShowsForm").on("submit", function(e) {
     e.preventDefault();
 
-    var eventName, recordedLink, start, end, amount, user, showData, errorCounter;
+    var eventName, recordedLink, start, end, amount, user, showsData, errorCounter;
 
-    showData = {
+    showsData = {
         event_name: $("#frm-eventName").val(),
         recorded_link: $("#frm-recordedLink").val(),
         start: $("#frm-start").val(),
@@ -110,7 +110,7 @@ $("#addShowForm").on("submit", function(e) {
     };
 
     errorCounter = 0;
-    $.each(showData, function(index, data) {
+    $.each(showsData, function(index, data) {
         if (data == '') {
             errorCounter++;
         }
@@ -121,19 +121,19 @@ $("#addShowForm").on("submit", function(e) {
     }
 
     $.ajax({
-        url: "/api/show",
+        url: "/api/shows",
         method: 'POST',
-        data: showData,
+        data: showsData,
         beforeSend: function() {
             hideSuccMessage();
         },
         success: function(data) {
-            gotShow(data);
+            gotLatestShows(data);
             setTimeout(hideSuccMessage, 3000);
             showSuccMessage('Record added successfully');
         },
         complete: function() {
-            editShowCancel();
+            editShowsCancel();
         },
         error: function() {
             alert("Error occurred");
@@ -164,9 +164,9 @@ function getUserList(userType) {
 }
 
 function viewRow(rowIdentifier) {
-    $.get("/api/show/" + rowIdentifier, function(data, status) {
+    $.get("/api/shows/" + rowIdentifier, function(data, status) {
         if(status == 'success') {
-            showShow(data);
+            showShows(data);
         } else {
             alert("Ajax error occurred");
             console.log(data);
@@ -177,18 +177,18 @@ function viewRow(rowIdentifier) {
 
 function editClick() {
     $('.succMsg').addClass('hide');
-    $('#addShowForm').addClass('hide');
-    $('#editShowForm').removeClass('hide');
+    $('#addShowsForm').addClass('hide');
+    $('#editShowsForm').removeClass('hide');
 
-    $('#modal-show-form').modal({show:true});
-    $('#modal-show-view').modal('hide');
+    $('#modal-shows-form').modal({show:true});
+    $('#modal-shows-view').modal('hide');
 }
 
 function editCancel() {
-    $('#modal-show-form').modal('hide');
+    $('#modal-shows-form').modal('hide');
 }
 
-function showShow(data){
+function showShows(data){
     // TODO: add better error handling
     if(!data.length) {
         alert("No records found");
@@ -216,23 +216,23 @@ function showShow(data){
     $("#view-user").html(data.user.nickname);
     $("#edit-form-user").html(data.user.nickname);
 
-    document.getElementById('view-title').innerHTML = 'View Show - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    document.getElementById('form-title').innerHTML = 'Edit Show - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    document.getElementById('view-title').innerHTML = 'View Shows - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    document.getElementById('form-title').innerHTML = 'Edit Shows - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
-    $('#modal-show-view').modal();
+    $('#modal-shows-view').modal();
 }
 
-function editShowCancel(){
-    $('#modal-show-form').modal('hide');
+function editShowsCancel(){
+    $('#modal-shows-form').modal('hide');
 }
 
-$("#editShowForm").on("submit", function(e) {
+$("#editShowsForm").on("submit", function(e) {
     e.preventDefault();
 
-    var showId, showData, errorCounter;
+    var showsId, showsData, errorCounter;
 
-    showId = $("#form-id").val();
-    showData = {
+    showsId = $("#form-id").val();
+    showsData = {
         event_name: $("#form-eventName").val(),
         recorded_link: $("#form-recordedLink").val(),
         start: $("#form-start").val(),
@@ -241,7 +241,7 @@ $("#editShowForm").on("submit", function(e) {
     };
 
     errorCounter = 0;
-    $.each(showData, function(index, data) {
+    $.each(showsData, function(index, data) {
         if (data == '') {
             errorCounter++;
         }
@@ -252,19 +252,19 @@ $("#editShowForm").on("submit", function(e) {
     }
 
     $.ajax({
-        url: "/api/show/" + showId,
+        url: "/api/shows/" + showsId,
         method: 'PUT',
-        data: showData,
+        data: showsData,
         beforeSend: function() {
             hideSuccMessage();
         },
         success: function(data) {
-            gotShow(data);
+            gotLatestShows(data);
             setTimeout(hideSuccMessage, 3000);
             showSuccMessage('Record edited successfully');
         },
         complete: function() {
-            editShowCancel();
+            editShowsCancel();
         },
         error: function() {
             alert("Error occurred");
@@ -272,9 +272,9 @@ $("#editShowForm").on("submit", function(e) {
     });    
 });
 
-function gotShow(data){
-    //wdit show modal
-    document.forms['showForm'].reset();
+function gotLatestShows(data){
+    //edit shows modal
+    document.forms['showsForm'].reset();
 
     $("#form-id").val(data.id);
     $("#form-eventName").val(data.eventName);
@@ -284,8 +284,8 @@ function gotShow(data){
     $("#form-amount").val(data.amount);
     $("#edit-form-user").val(data.user.nickname);
 
-    document.getElementById('form-title').innerHTML = 'Edit Show - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $('#modal-show-form').modal();
+    document.getElementById('form-title').innerHTML = 'Edit Shows - ' + data.eventName + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    $('#modal-shows-form').modal();
 
     dataTable.destroy();
     getShows();

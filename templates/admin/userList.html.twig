@@ -42,7 +42,7 @@
 {% block breadcrum %}
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item active">Users</li>
+        <li class="breadcrumb-item active">{{ userType != 'venue' ? 'Users' : 'Viewers'}}</li>
     </ol>
 {% endblock %}
 
@@ -51,7 +51,8 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title" id="form-title">Add / Edit User</h4>
+              <h4 class="modal-title" id="form-title">Add / Edit {{ userType != 'venue' ? 'User' : 'Viewer'}}</h4>
+              <input type="hidden" id="userType" value="{{ userType }}">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -85,7 +86,7 @@
                                 </tr>
                                 <tr>
                                     <th align="right">Password</th>
-                                    <td><input required type="password" name="passwordHash" id="frm-password-hash"/></td>
+                                    <td><input required type="password" name="password" id="frm-password"/></td>
                                 </tr>
                                 <tr>
                                     <th align="right">Streaming Key</th>
@@ -116,10 +117,15 @@
                                     <td>
                                         <select required name="userType" id="frm-user-type">
                                             <option value="">Select User Type</option>
-                                            <option value="viewer">Viewer</option>
-                                            <option value="venue">Venue</option>
+                                            {% for userType in userTypes %}
+                                                <option value="{{ userType.type }}">{{ userType.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Is Admin</th>
+                                    <td><input type="checkbox" name="isAdmin" id="frm-is-admin"/></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="height: 10px;"> </td>
@@ -164,7 +170,7 @@
                                 </tr>
                                 <tr>
                                     <th align="right">Password</th>
-                                    <td><input type="password" name="passwordHash" id="form-password-hash"/></td>
+                                    <td><input type="password" name="password" id="form-password"/></td>
                                 </tr>
                                 <tr>
                                     <th align="right">Streaming Key</th>
@@ -196,10 +202,15 @@
                                     <td>
                                         <select required name="userType" id="form-user-type">
                                             <option value="">Select User Type</option>
-                                            <option value="viewer">Viewer</option>
-                                            <option value="venue">Venue</option>
+                                            {% for userType in userTypes %}
+                                                <option value="{{ userType.type }}">{{ userType.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Is Admin</th>
+                                    <td><input type="checkbox" name="isAdmin" id="form-is-admin"/></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="height: 10px;"> </td>
@@ -226,15 +237,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="view-title">Add / Edit User - (No user selected)</h4>
-                    <button type="button" class="add-stream" data-toggle="modal" data-target="#modal-add-stream" aria-label="Add Stream" id="btnAddStream">
-                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Grant Streaming Permissions</span>
-                    </button>
-                    <button type="button" class="remove-stream" data-toggle="modal" data-target="#modal-remove-stream" aria-label="Remove Stream" id="btnRemoveStream">
-                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Pause Streaming</span>
-                    </button>
-                    <button type="button" class="edit" aria-label="Edit" id="btnEditUser" onclick="editClick()">
-                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
-                    </button>
+                    {% if userType != 'venue' %}
+                        <button type="button" class="add-stream" data-toggle="modal" data-target="#modal-add-stream" aria-label="Add Stream" id="btnAddStream">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">Grant Streaming Permissions</span>
+                        </button>
+                        <button type="button" class="remove-stream" data-toggle="modal" data-target="#modal-remove-stream" aria-label="Remove Stream" id="btnRemoveStream">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">Pause Streaming</span>
+                        </button>
+                        <button type="button" class="edit" aria-label="Edit" id="btnEditUser" onclick="editClick()">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
+                        </button>
+                    {% endif %}
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -265,7 +278,7 @@
                                 </tr>
                                 <tr>
                                     <th align="right">Password</th>
-                                    <td id="view-password-hash"></td>
+                                    <td id="view-password"></td>
                                 </tr>
                                 <tr>
                                     <th align="right">Streaming Server</th>
@@ -291,6 +304,10 @@
                                     <th align="right">User Type</th>
                                     <td id="view-user-type"></td>
                                 </tr>
+                                <tr>
+                                    <th align="right">Is Admin</th>
+                                    <td id="view-is-admin"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -306,26 +323,31 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Users List</h3>
+                        <h3 class="card-title">{{ userType != 'venue' ? 'Users' : 'Viewers'}} List</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        {% if userType != 'venue' %}
                         <div id="customButtons" style="margin-bottom:10px">
                             <button name="btnAdd" id="btnAdd" onclick="addUser()">Add New</button>
                         </div>
+                        {% endif %}
                         <div class="succMsg hide"></div>
                         <table id="userTable" class="table table-bordered table-striped hover">
                             <thead>
                             <tr>
-                                <th width="15%">Email</th>
+                                <th width="12%">Email</th>
                                 <th width="10%">First Name</th>
                                 <th width="10%">Last Name</th>
                                 <th width="10%">Nickname</th>
-                                <th width="15%">Streaming Key</th>
+                                <th width="10%">Streaming Key</th>
                                 <th width="10%">Pic</th>
                                 <th width="10%">Categories</th>
                                 <th width="10%">Bio</th>
-                                <th width="10%">User Type</th>
+                                {% if userType != 'venue' %}
+                                    <th width="10%">User Type</th>
+                                    <th width="8%">Is Admin</th>
+                                {% endif %}
                             </tr>
                             </thead>
                             <tbody id="tbody-companies" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
@@ -343,7 +365,10 @@
                                 <th>Pic</th>
                                 <th>Categories</th>
                                 <th>Bio</th>
-                                <th>User Type</th>
+                                {% if userType != 'venue' %}
+                                    <th>User Type</th>
+                                    <th width="10%">Is Admin</th>
+                                {% endif %}
                             </tr>
                             </tfoot>
                         </table>

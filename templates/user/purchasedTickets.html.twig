@@ -16,13 +16,13 @@
         </thead>
         <tbody>
             {% for order in orders %}
-                {% set show = order.show %}
-                {% set user = show.user %}
+                {% set shows = order.shows %}
+                {% set user = shows.user %}
                 <tr>
                     <td>{{ user.nickName }}</td>
-                    <td>{{ show.eventName }}</td>
-                    <td>{{ show.start|date("Y-m-d H:i") }}</td>
-                    <td>{{ show.end|date("Y-m-d H:i") }}</td>
+                    <td>{{ shows.eventName }}</td>
+                    <td>{{ shows.start|date("Y-m-d H:i") }}</td>
+                    <td>{{ shows.end|date("Y-m-d H:i") }}</td>
                     <td>${{ order.amount }}</td>
                     <td>
                         <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
