@@ -9,8 +9,8 @@
 
             <div class="section-title text-center">
                 <br/>
-                <h2>Live Now</h2>
-                <h3>Users currently streaming</h3>
+                <h2>Venues and Upcoming Shows</h2>
+                <!-- <h3>Users currently streaming</h3> -->
             </div>
 
             {% for user in streamingUsers %}
@@ -18,15 +18,17 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <h3>{{ user.nickname }}</h3>
-                                <p id="fullname" style="{% if user.nickname == 'ClubEd' %}color:#33f70c;{% endif %}">{{ user.lastName }}, {{ user.firstName }}</p>
+
+                                <p id="bio">{{ user.bio }}</p>
+
                                 <div class="col-md-4">
-                                    <p><a href="/profile/{{ user.nickname }}">View Profile</a></p>
+                                    <p><a href="/profile/{{ user.nickname }}">Upcoming Shows</a></p>
                                 </div>
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     {% if user.streamingKey != '' %}
                                         <p><a href="/stream/view/{{ user.nickname }}">Watch stream</a></p>
                                     {% endif %}
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-md-4">
                                 <img src="/assets/profile/{{ user.profileImage }}"/>

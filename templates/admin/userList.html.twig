@@ -1,0 +1,372 @@
+{# admin/companyList.html.twig #}
+{% extends 'admin-base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <style type="text/css">
+        .succMsg {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            width: auto;
+        }
+        .hide {
+            display: none;
+        }
+        .selectTag {
+            width: 202px;
+        }
+        .imgScale {
+            width: 30%;
+            height: auto;
+        }
+        .error {
+            color: red;
+        }
+        .valignTop {
+            vertical-align: top;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrum %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Users</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="modal fade" id="modal-user-form">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="form-title">Add / Edit User</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <form id="addUserForm" class="user-form" name="addUserForm" method="post">
+                        <table border="0">
+                            <tbody class="valignTop">
+                                <tr>
+                                    <th width="40%" align="right">Nickname</th>
+                                    <td width="60%">
+                                        <input required type="text" name="nickname" id="frm-nickname"/>
+                                        <div class="error hide nickname-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Email</th>
+                                    <td>
+                                        <input required type="email" name="email" id="frm-email"/>
+                                        <div class="error hide email-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">First Name</th>
+                                    <td><input required type="text" name="firstName" id="frm-first-name"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Last Name</th>
+                                    <td><input required type="text" name="lastName" id="frm-last-name"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Password</th>
+                                    <td><input required type="password" name="passwordHash" id="frm-password-hash"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Key</th>
+                                    <td><input type="text" name="streamingKey" id="frm-streaming-key"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Server</th>
+                                    <td><input type="text" name="streamingServer" id="frm-streaming-server"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Profile Pic</th>
+                                    <td>
+                                        <input type="file" id="frm-image"/>
+                                        <input type="hidden" name="profileImage" id="frm-profile-image"/>
+                                        <div class="error hide profile-image-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Category</th>
+                                    <td><input type="text" name="category" id="frm-category"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Bio</th>
+                                    <td><textarea name="bio" id="frm-bio"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">User Type</th>
+                                    <td>
+                                        <select required name="userType" id="frm-user-type">
+                                            <option value="">Select User Type</option>
+                                            <option value="viewer">Viewer</option>
+                                            <option value="venue">Venue</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="height: 10px;"> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button name="btnSave" id="btnSave">Save</button>
+                                        <button type="button" name="btnCancel" onclick="editUserCancel()">Cancel</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+
+                    <form id="editUserForm" class="user-form" name="editUserForm" method="put">
+                        <input type="hidden" name="id" id="form-id" value=""/>
+
+                        <table border="0">
+                            <tbody class="valignTop">
+                                <tr>
+                                    <th width="40%" align="right">Nickname</th>
+                                    <td width="60%">
+                                        <input required type="text" name="nickname" id="form-nickname"/>
+                                        <div class="error hide nickname-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Email</th>
+                                    <td>
+                                        <input required type="email" name="email" id="form-email"/>
+                                        <div class="error hide email-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">First Name</th>
+                                    <td><input required type="text" name="firstName" id="form-first-name"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Last Name</th>
+                                    <td><input required type="text" name="lastName" id="form-last-name"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Password</th>
+                                    <td><input type="password" name="passwordHash" id="form-password-hash"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Key</th>
+                                    <td><input type="text" name="streamingKey" id="form-streaming-key"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Server</th>
+                                    <td><input type="text" name="streamingServer" id="form-streaming-server"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Profile Pic</th>
+                                    <td>
+                                        <div id="form-profile-image-view"></div>
+                                        <input type="file" id="form-image"/>
+                                        <input type="hidden" name="profileImage" id="form-profile-image"/>
+                                        <div class="error hide profile-image-error"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Category</th>
+                                    <td><input type="text" name="category" id="form-category"/></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Bio</th>
+                                    <td><textarea name="bio" id="form-bio"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">User Type</th>
+                                    <td>
+                                        <select required name="userType" id="form-user-type">
+                                            <option value="">Select User Type</option>
+                                            <option value="viewer">Viewer</option>
+                                            <option value="venue">Venue</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="height: 10px;"> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button name="btnSave" id="btnEdit">Save</button>
+                                        <button type="button" name="btnCancel" onclick="editUserCancel()">Cancel</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </tbody>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- view user modal window -->
+    <div class="modal fade" id="modal-user-view">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="view-title">Add / Edit User - (No user selected)</h4>
+                    <button type="button" class="add-stream" data-toggle="modal" data-target="#modal-add-stream" aria-label="Add Stream" id="btnAddStream">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Grant Streaming Permissions</span>
+                    </button>
+                    <button type="button" class="remove-stream" data-toggle="modal" data-target="#modal-remove-stream" aria-label="Remove Stream" id="btnRemoveStream">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Pause Streaming</span>
+                    </button>
+                    <button type="button" class="edit" aria-label="Edit" id="btnEditUser" onclick="editClick()">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <table border="0">
+                            <tbody class="valignTop">
+                                <tr>
+                                    <th width="40%" align="right">Record ID</th>
+                                    <td width="60%" id="view-id"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Nickname</th>
+                                    <td id="view-nickname"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">First Name</th>
+                                    <td id="view-first-name"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Last Name</th>
+                                    <td id="view-last-name"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Email</th>
+                                    <td id="view-email"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Password</th>
+                                    <td id="view-password-hash"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Server</th>
+                                    <td id="view-streaming-server"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Streaming Key</th>
+                                    <td id="view-streaming-key"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Profile Image</th>
+                                    <td id="view-profile-image"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Category</th>
+                                    <td id="view-category"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">Bio</th>
+                                    <td id="view-bio"></td>
+                                </tr>
+                                <tr>
+                                    <th align="right">User Type</th>
+                                    <td id="view-user-type"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END view user modal window -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Users List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div id="customButtons" style="margin-bottom:10px">
+                            <button name="btnAdd" id="btnAdd" onclick="addUser()">Add New</button>
+                        </div>
+                        <div class="succMsg hide"></div>
+                        <table id="userTable" class="table table-bordered table-striped hover">
+                            <thead>
+                            <tr>
+                                <th width="15%">Email</th>
+                                <th width="10%">First Name</th>
+                                <th width="10%">Last Name</th>
+                                <th width="10%">Nickname</th>
+                                <th width="15%">Streaming Key</th>
+                                <th width="10%">Pic</th>
+                                <th width="10%">Categories</th>
+                                <th width="10%">Bio</th>
+                                <th width="10%">User Type</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody-companies" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
+                            <tr>
+                                <td colspan="15">Loading...</td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nickname</th>
+                                <th>Streaming Key</th>
+                                <th>Pic</th>
+                                <th>Categories</th>
+                                <th>Bio</th>
+                                <th>User Type</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- DataTables -->
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+
+    <script src="{{ asset('/assets/js/moment.js') }}"></script>
+    <script src="{{ asset('/assets/js/bootstrap-datetimepicker.js') }}"></script>
+    <script src="{{ asset('/assets/js/user.js') }}"></script>
+
+{% endblock %}

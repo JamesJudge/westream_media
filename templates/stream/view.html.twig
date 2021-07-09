@@ -51,27 +51,46 @@
             background: #ffe300;
             box-shadow: 2px 2px 2px #0000001c;
         }
+        .center {
+            text-align: center;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
 
-    <div class="section-title text-center">
-        <h2>{{ streamer }}</h2>
-    </div>
-    <div class="chat-wrapper">
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe>
+    {% if (showEvent)  %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
         </div>
+        <div class="chat-wrapper">
+            <div class="embed-responsive embed-responsive-16by9">
+                <!-- <iframe id="videoContainer" class="embed-responsive-item" width="100%" height="100%" src="//live.jamesjudge.info:5080/LiveApp/play.html?name={{ streamID }}" frameborder="0" allowfullscreen></iframe> -->
+                <video id="video-player" controls playsinline></video>
+            </div>
 
-        <div id="message-box"></div>
-        <div class="user-panel">
-            <input type="hidden" name="name" id="name" value="{{ nickname }}" />
-            <input type="text" name="message" id="message" placeholder="Type your message here..." maxlength="255" />
-            <button id="send-message">Send</button>
+            <div id="message-box"></div>
+            <div class="user-panel">
+                <input type="hidden" name="name" id="name" value="{{ nickname }}" />
+                <input type="text" name="message" id="message" placeholder="Type your message here..." maxlength="255" />
+                <button id="send-message">Send</button>
+            </div>
         </div>
-    </div>
-
+    {% elseif (ticksetPurchased == 0) %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
+        </div>
+        <div align="center"><h4>You have not purchased ticket of this venue</h4></div>
+        <div>&nbsp;</div>
+        <div class="center"><a href="/profile/{{ streamer }}">Click here to purchase ticket</a></div>
+        <div>&nbsp;</div>
+    {% else %}
+        <div class="section-title text-center">
+            <h2>{{ streamer }}</h2>
+        </div>
+        <div align="center"><h4>No any event going on current time</h4></div>
+        <div>&nbsp;</div>
+    {% endif %}
 
 {% endblock %}
 
@@ -81,9 +100,10 @@
     {{ parent() }}
 
     <script language="javascript" type="text/javascript">
-        //create a new WebSocket object.
+        // JS for chat server
+        // create a new WebSocket object.
         var msgBox = $('#message-box');
-        var wsUri = "ws://live.jamesjudge.info:9000/assets/poc/server.php";
+        var wsUri = "wss://testing.videovoyager.org:9000/poc/server.php";
         websocket = new WebSocket(wsUri);
 
         websocket.onopen = function(ev) { // connection is open
@@ -163,5 +183,51 @@
             message_input.val(''); //reset message input
         }
     </script>
+    <script src="https://player.live-video.net/1.2.0/amazon-ivs-player.min.js"></script>
+    <script language="JavaScript" type="text/javascript">
+        // JS for aws streaming player
+        (function (IVSPlayerPackage) {
+            // First, check if the browser supports the IVS player.
+            if (!IVSPlayerPackage.isPlayerSupported) {
+                console.warn("The current browser does not support the IVS player.");
+                return;
+            }
 
+            const PlayerState = IVSPlayerPackage.PlayerState;
+            const PlayerEventType = IVSPlayerPackage.PlayerEventType;
+
+            // Initialize player
+            const player = IVSPlayerPackage.create();
+            console.log("IVS Player version:", player.getVersion());
+            player.attachHTMLVideoElement(document.getElementById("video-player"));
+
+            // Attach event listeners
+            player.addEventListener(PlayerState.PLAYING, function () {
+                console.log("Player State - PLAYING");
+            });
+            player.addEventListener(PlayerState.ENDED, function () {
+                console.log("Player State - ENDED");
+            });
+            player.addEventListener(PlayerState.READY, function () {
+                console.log("Player State - READY");
+            });
+            player.addEventListener(PlayerEventType.ERROR, function (err) {
+                console.warn("Player Event - ERROR:", err);
+            });
+            player.addEventListener(PlayerEventType.TEXT_METADATA_CUE, (cue) => {
+                const metadataText = cue.text;
+                const position = player.getPosition().toFixed(2);
+                console.log(
+                    `PlayerEvent - TEXT_METADATA_CUE: "${metadataText}". Observed ${position}s after playback started.`
+                );
+            });
+
+            // Setup stream and play
+            player.setAutoplay(true);
+            player.load(
+                "https://a5e08faf82b5.us-west-2.playback.live-video.net/api/video/v1/us-west-2.185192162905.channel.h1OeAA6SIh0Q.m3u8"
+            );
+            player.setVolume(0.5);
+        })(window.IVSPlayer);
+    </script>
 {% endblock %}

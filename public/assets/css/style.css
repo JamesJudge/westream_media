@@ -457,6 +457,7 @@ ol {
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
+	text-align: center;
 	float: left;
 }
 
@@ -478,7 +479,7 @@ ol {
 	display: inline-block;
 	font-size: 16px;
 	color: #fff;
-	padding: 45px 24px;
+	padding: 10px 24px;
 	position: relative;
 }
 
@@ -486,9 +487,11 @@ ol {
 	color: #ffe400;
 }
 
+/*
 .main-menu li.active a {
 	background: #080808;
 }
+*/
 
 .main-menu li.active a:after {
 	position: absolute;
@@ -508,6 +511,7 @@ ol {
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
+	margin-bottom: 10px;
 }
 
 .header-social-links a {

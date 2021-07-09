@@ -1,0 +1,289 @@
+{% extends 'admin-base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-datetimepicker.css">
+
+    <style type="text/css">
+        .succMsg {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            width: auto;
+        }
+        .hide {
+            display: none;
+        }
+        .selectTag {
+            width: 202px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block breadcrum %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Shows</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="modal fade" id="modal-show-form">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="form-title">Add / Edit Show</h4>
+                <button type="button" id="editShowModalClose" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-body">
+                    <form id="addShowForm" class="show-form" name="showForm" method="post">
+                        <table border="0">
+                            <tr>
+                                <th align="right">Event Name</th>
+                                <td><input required type="text" name="event_name" id="frm-eventName"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Recorded Link</th>
+                                <td><input required type="text" name="recorded_link" id="frm-recordedLink"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Start</th>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="start" id="frm-start"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th align="right">End</th>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="end" id="frm-end"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th align="right">Amount</th>
+                                <td><input required type="text" name="amount" id="frm-amount"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Venue</th>
+                                <td>
+                                    <div id="formUserList"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="height: 10px;"> </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button name="btnSave" id="btnSave">Save</button>
+                                    <button type="button" name="btnCancel" onclick="editShowCancel()">Cancel</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+
+                    <form id="editShowForm" class="show-form" name="showForm" method="post">
+                        <input type="hidden" name="id" id="form-id" value=""/>
+                        <table border="0">
+                            <tr>
+                                <th align="right">Event Name</th>
+                                <td><input required type="text" name="event_name" id="form-eventName"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Recorded Link</th>
+                                <td><input required type="text" name="recorded_link" id="form-recordedLink"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Start</th>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="start" id="form-start"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th align="right">End</th>
+                                <td>
+                                    <div class="input-append date dateTime">
+                                        <input required readonly type="text" name="end" id="form-end"/>
+                                        <span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th align="right">Amount</th>
+                                <td><input required type="text" name="amount" id="form-amount"/></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Venue</th>
+                                <td>
+                                    <span id="edit-form-user"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="height: 10px;"> </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button name="btnSave" id="btnEdit">Save</button>
+                                    <button type="button" name="btnCancel" onclick="editShowCancel()">Cancel</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- view show modal window -->
+    <div class="modal fade" id="modal-show-view">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="view-title">Add / Edit Show - (No show selected)</h4>
+
+                    <button type="button" class="edit" aria-label="Edit" id="btnEditShow" onclick="editClick()">
+                        <span class="glyphicon glyphicon-align-left" aria-hidden="true">Edit</span>
+                    </button>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="modal-body">
+
+                        <table border="0">
+                            <tr>
+                                <th align="right">Record ID</th>
+                                <td id="view-id"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Event Name</th>
+                                <td id="view-eventName"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Recorded Link</th>
+                                <td id="view-recordedLink"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Start</th>
+                                <td id="view-start"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">End</th>
+                                <td id="view-end"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Amount</th>
+                                <td id="view-amount"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Venue</th>
+                                <td id="view-user"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END view show modal window -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Shows List</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="customButtons" style="margin-bottom:10px">
+                            <button name="btnAdd" id="btnAdd" onclick="addShow()">Add New</button>
+                        </div>
+                        <div class="succMsg hide"></div>
+                        <table id="showTable" class="table table-bordered table-striped hover">
+                            <thead>
+                                <tr>
+                                    <th width="20%">Event Name</th>
+                                    <th width="27%">Recorded Link</th>
+                                    <th width="12%">Start</th>
+                                    <th width="12%">End</th>
+                                    <th width="10%">Amount</th>
+                                    <th width="20%">Venue</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tbody-show" onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'auto'">
+                                <tr>
+                                    <td colspan="15">Loading...</td>
+                                </tr>
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Recorded Link</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Amount</th>
+                                    <th>Venue</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- DataTables -->
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+
+    <script src="{{ asset('/assets/js/moment.js') }}"></script>
+    <script src="{{ asset('/assets/js/bootstrap-datetimepicker.js') }}"></script>
+    <script src="{{ asset('/assets/js/show.js') }}"></script>
+
+{% endblock %}

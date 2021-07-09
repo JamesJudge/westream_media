@@ -1,32 +1,14 @@
-<header class="header-section">
-    <div class="header-warp">
+<header class="header-section" style="background-image: url('{{ asset('assets/img/bg.png') }}')">
+    <p class="header-warp">
         <!-- Site Logo -->
         <a href="/" class="site-logo">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="The Video Voyager Logo" align="center">
         </a>
         <!-- responsive -->
         <div class="nav-switch">
             <i class="fa fa-bars"></i>
         </div>
-        <!-- Main Menu -->
-        <ul class="main-menu">
-            <li{% if section|default and section == 'home' %} class="active"{% endif %}><a href="/">Home</a></li>
-            <li{% if section|default and section == 'live' %} class="active"{% endif %}><a href="/list/streams">Live Now</a></li>
-            <li{% if section|default and section == 'Band' %} class="active"{% endif %}><a href="/category/Band">Bands</a></li>
-            <li{% if section|default and section == 'DJ' %} class="active"{% endif %}><a href="/category/DJ">DJ’s</a></li>
-            <li{% if section|default and section == 'Performer' %} class="active"{% endif %}><a href="/category/Performer">Shows</a></li>
-            <li{% if section|default and section == 'users' %} class="active"{% endif %}><a href="/list/profiles">Users</a></li>
-            <li{% if section|default and section == 'chat' %} class="active"{% endif %}><a href="/list/chatrooms">Chat</a></li>
 
-            {% if currentUser|default %}
-                <li{% if section|default and section == 'profile' %} class="active"{% endif %}><a href="/profile/{{ currentUser.nickname }}">My Profile</a></li>
-                <li{% if section|default and section == 'logout' %} class="active"{% endif %}><a href="/logout">Log Out</a></li>
-            {% else %}
-                <li{% if section|default and section == 'signup' %} class="active"{% endif %}><a href="/signup">Free Sign Up</a></li>
-                <li{% if section|default and section == 'login' %} class="active"{% endif %}><a href="/login">Log In</a></li>
-            {% endif %}
-
-        </ul>
         <!-- Social Links -->
         <div class="header-social-links">
             <a href=""><i class="fa fa-twitter"></i></a>
@@ -36,5 +18,28 @@
             <a href=""><i class="fa fa-facebook"></i></a>
             <a href=""><i class="fa fa-youtube-play"></i></a>
         </div>
+
+        <!-- Main Menu -->
+        <p>
+            <ul class="main-menu">
+                <li{% if section|default and section == 'home' %} class="active"{% endif %}><a href="/">Home</a></li>
+                <li{% if section|default and section == 'live' %} class="active"{% endif %}><a href="/list/streams">Venues</a></li>
+                <!-- <li{% if section|default and section == 'Band' %} class="active"{% endif %}><a href="/category/Band">Bands</a></li>
+                <li{% if section|default and section == 'DJ' %} class="active"{% endif %}><a href="/category/DJ">DJ’s</a></li>
+                <li{% if section|default and section == 'Performer' %} class="active"{% endif %}><a href="/category/Performer">Shows</a></li>
+                <li{% if section|default and section == 'users' %} class="active"{% endif %}><a href="/list/profiles">Users</a></li> -->
+                <!-- <li{% if section|default and section == 'chat' %} class="active"{% endif %}><a href="/list/chatrooms">Chat</a></li> -->
+
+                {% if currentUser|default %}
+                    <li{% if section|default and section == 'profile' %} class="active"{% endif %}><a href="/profile/{{ currentUser.nickname }}">My Tickets</a></li>
+                    <li{% if section|default and section == 'logout' %} class="active"{% endif %}><a href="/logout">Log Out</a></li>
+                {% else %}
+                    <li{% if section|default and section == 'signup' %} class="active"{% endif %}><a href="/signup">Free Sign Up</a></li>
+                    <li{% if section|default and section == 'login' %} class="active"{% endif %}><a href="/login">Log In</a></li>
+                {% endif %}
+
+            </ul>
+        </p>
+
     </div>
 </header>

@@ -1,0 +1,42 @@
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div style="text-align: center;"><h4>Purchased Tickets</h4></div>
+<div>&nbsp;</div>
+{% if orders %}
+    <table class="table my-table">
+        <thead>
+            <tr>
+                <th width="25%">User</th>
+                <th width="26%">Event Name</th>
+                <th width="16%">Start Date</th>
+                <th width="16%">End Date</th>
+                <th width="5%">Amount</th>
+                <th width="12%">Watch Stram</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                {% set show = order.show %}
+                {% set user = show.user %}
+                <tr>
+                    <td>{{ user.nickName }}</td>
+                    <td>{{ show.eventName }}</td>
+                    <td>{{ show.start|date("Y-m-d H:i") }}</td>
+                    <td>{{ show.end|date("Y-m-d H:i") }}</td>
+                    <td>${{ order.amount }}</td>
+                    <td>
+                        <a href="/stream/view/{{ user.nickname }}">Watch stream</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <table class="table my-table">
+        <thead>
+            <tr>
+                <th>No events found</th>
+            </tr>
+        </thead>
+    </table>
+{% endif %}

@@ -7,6 +7,7 @@
  */
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,15 +20,18 @@ class HomeController extends AbstractController
         return $currentUser;
     }
 
-
-
-
     /**
      * @Route("/")
      */
     public function view()
     {
-
+        $toRedirect = $this->getParameter('toRedirect');
+        if ($toRedirect) {
+            $url = $this->getParameter('redrect_url');
+            if ($url) {
+                return $this->redirect($url, 308);
+            }
+        }
 
         return $this->render('home/home.html.twig', [
             'section' => 'home',
